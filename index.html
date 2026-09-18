@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Job Radar</title>
+  <meta name="description" content="Job Radar: a self-hosted, open-source job-search automation tool, and Job Radar Hub, a public read-only API of job listings for agents and other tools.">
+  <meta name="google-site-verification" content="PLACEHOLDER_REPLACE_ME">
+  <link rel="canonical" href="https://job-radar.pages.dev/">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script type="module" src="/assets/analytics.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <a href="/">Job Radar</a>
+      <nav>
+        <a href="/api.html">API docs</a>
+        <a href="https://github.com/woskam/job-radar">Open source</a>
+        <a href="https://github.com/woskam/job-radar-hub">Hub source</a>
+      </nav>
+    </header>
+
+    <h1>Job Radar</h1>
+    <p class="tagline">Job-search automation you run yourself, and a public feed of the job listings it finds.</p>
+
+    <h2>What this is</h2>
+    <p>
+      Job Radar is a self-hosted tool that scrapes career pages across 100+ companies
+      (Workday, Greenhouse, SmartRecruiters, SAP SuccessFactors, and more), scores matches
+      against your own profile, and drafts cover letters and tailored CVs with an LLM --
+      with a human reviewing everything before anything is ever sent.
+    </p>
+
+    <h2>Open source -- host it yourself</h2>
+    <div class="card">
+      <h3><a href="https://github.com/woskam/job-radar">github.com/woskam/job-radar</a></h3>
+      <p>
+        The whole personal pipeline: scrapers, matching, letter/CV generation, a review
+        dashboard. Designed to run comfortably on something as small as a Raspberry Pi.
+        MIT-licensed. Nothing is ever sent automatically -- you approve every step.
+      </p>
+    </div>
+
+    <h2>Job Radar Hub -- a public API of job listings</h2>
+    <div class="card">
+      <h3><a href="https://github.com/woskam/job-radar-hub">github.com/woskam/job-radar-hub</a></h3>
+      <p>
+        A separate, tokengated read API serving the generic listing data a Job Radar
+        instance finds -- title, company, location, URL, description. No personal data:
+        no relevance scores, no application status, no letters or CVs. Fed by a scrape
+        cycle that already knows how to talk to dozens of different ATS platforms, so you
+        don't have to reverse-engineer them yourself.
+      </p>
+      <p><a href="/api.html">Read the API docs &rarr;</a></p>
+    </div>
+
+    <h2>For agents</h2>
+    <p>This site is built to be readable by AI agents and other automated tools, not just browsers:</p>
+    <table>
+      <tr><th>Resource</th><th>Purpose</th></tr>
+      <tr><td><a href="/llms.txt">/llms.txt</a></td><td>Plain-Markdown site index</td></tr>
+      <tr><td><a href="/openapi.json">/openapi.json</a></td><td>OpenAPI 3.0 spec for the Job Radar Hub API</td></tr>
+      <tr><td><a href="/.well-known/api-catalog">/.well-known/api-catalog</a></td><td>Machine-readable resource catalog (RFC 9727)</td></tr>
+      <tr><td><a href="/robots.txt">/robots.txt</a></td><td>Explicitly allows major AI crawlers</td></tr>
+    </table>
+    <p class="agent-note">
+      Coming later: an MCP server for the Hub API. Not live yet -- no MCP server-card is
+      published here until there's a real server behind it.
+    </p>
+
+    <footer>
+      <a href="https://github.com/woskam/job-radar">job-radar</a> ·
+      <a href="https://github.com/woskam/job-radar-hub">job-radar-hub</a> ·
+      <a href="https://github.com/woskam/job-radar-site">this site's source</a>
+    </footer>
+  </div>
+</body>
+</html>

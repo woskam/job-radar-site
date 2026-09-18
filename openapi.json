@@ -1,0 +1,87 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Job Radar Hub API",
+    "description": "A public, tokengated read API of generic job-listing data, fed by a push from a Job Radar instance's own scrape cycle. Carries no personal data -- no relevance score, no application status, no letters/CVs. No apply/send endpoint, and there never will be one: this API stops at listing data, what you do with it is entirely up to you.",
+    "version": "1.0.0",
+    "license": { "name": "MIT", "url": "https://github.com/woskam/job-radar-hub/blob/main/LICENSE" }
+  },
+  "externalDocs": {
+    "description": "Source code",
+    "url": "https://github.com/woskam/job-radar-hub"
+  },
+  "servers": [
+    { "url": "https://job-radar-hub.example", "description": "Replace with the real hub instance's base URL" }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "API key issued by hand -- see https://job-radar.pages.dev/api.html for how to request one."
+      }
+    },
+    "schemas": {
+      "Listing": {
+        "type": "object",
+        "properties": {
+          "source": { "type": "string", "description": "ATS platform / scraper source identifier" },
+          "external_id": { "type": "string" },
+          "title": { "type": "string" },
+          "company": { "type": "string" },
+          "location": { "type": "string", "nullable": true },
+          "url": { "type": "string", "format": "uri" },
+          "description": { "type": "string", "nullable": true },
+          "scraped_at": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  },
+  "security": [{ "bearerAuth": [] }],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Liveness check",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string" } } } } }
+          }
+        }
+      }
+    },
+    "/jobs": {
+      "get": {
+        "summary": "List/filter job listings",
+        "parameters": [
+          { "name": "company", "in": "query", "schema": { "type": "string" }, "description": "Exact company name match" },
+          { "name": "source", "in": "query", "schema": { "type": "string" }, "description": "Exact source/ATS name match" },
+          { "name": "title_contains", "in": "query", "schema": { "type": "string" }, "description": "Substring match on title" },
+          { "name": "location_contains", "in": "query", "schema": { "type": "string" }, "description": "Substring match on location" },
+          { "name": "active", "in": "query", "schema": { "type": "integer", "enum": [0, 1], "default": 1 }, "description": "1 (default) = currently live, 0 = no longer seen in the latest scrape" },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 50, "maximum": 200 } },
+          { "name": "offset", "in": "query", "schema": { "type": "integer", "default": 0 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matching listings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": { "type": "integer" },
+                    "results": { "type": "array", "items": { "$ref": "#/components/schemas/Listing" } }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Missing or invalid API key" },
+          "429": { "description": "Rate limit exceeded for this key" }
+        }
+      }
+    }
+  }
+}

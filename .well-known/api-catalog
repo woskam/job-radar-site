@@ -1,0 +1,61 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://job-radar.pages.dev/",
+      "describedby": [
+        {
+          "href": "https://job-radar.pages.dev/llms.txt",
+          "type": "text/markdown",
+          "title": "Site index for LLMs"
+        }
+      ],
+      "sitemap": [
+        {
+          "href": "https://job-radar.pages.dev/sitemap.xml",
+          "type": "application/xml",
+          "title": "URL sitemap"
+        }
+      ],
+      "license": [
+        {
+          "href": "https://github.com/woskam/job-radar-site/blob/main/LICENSE",
+          "title": "Site content licence (MIT)"
+        }
+      ]
+    },
+    {
+      "anchor": "job-radar-hub-api",
+      "service-desc": [
+        {
+          "href": "https://job-radar.pages.dev/openapi.json",
+          "type": "application/json",
+          "title": "OpenAPI 3.0 spec for the Job Radar Hub API"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://job-radar.pages.dev/api.html",
+          "type": "text/html",
+          "title": "Human-readable API documentation"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://github.com/woskam/job-radar-hub",
+          "type": "text/html",
+          "title": "job-radar-hub source repository"
+        }
+      ]
+    },
+    {
+      "anchor": "job-radar-open-source",
+      "describedby": [
+        {
+          "href": "https://github.com/woskam/job-radar",
+          "type": "text/html",
+          "title": "job-radar source repository -- the self-hosted personal pipeline"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+# This entire site is meant to be read by agents and crawlers, human and
+# AI alike -- nothing here is gated behind robots.txt.
+User-agent: *
+Allow: /
+
+# Named explicitly for clarity, even though the wildcard rule above already
+# allows them.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://job-radar.pages.dev/sitemap.xml

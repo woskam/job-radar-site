@@ -1,0 +1,40 @@
+# Job Radar
+
+> Job Radar is a self-hosted, open-source job-search automation tool. Job Radar Hub is a
+> separate, public, tokengated read API serving the generic (non-personal) job-listing
+> data a Job Radar instance's scrape cycle finds.
+
+## What this is
+
+- Job Radar scrapes career pages across 100+ companies (Workday, Greenhouse,
+  SmartRecruiters, SAP SuccessFactors, and more), scores matches against a person's own
+  profile, and drafts cover letters/CVs with an LLM -- with a human reviewing everything
+  before anything is sent. Nothing is ever sent automatically.
+- Job Radar Hub carries none of that personal data. It only serves generic listing fields:
+  source, external_id, title, company, location, url, description, scraped_at.
+- Neither this site nor the Hub API has, or will ever have, an "apply" or "send" endpoint.
+  This stops at listing data -- what you do with it is entirely up to you.
+
+## Docs
+
+- [API documentation](https://job-radar.pages.dev/api.html): human-readable guide to the
+  Job Radar Hub API (auth, endpoints, examples).
+- [OpenAPI spec](https://job-radar.pages.dev/openapi.json): machine-readable spec for the
+  same API.
+- [API catalog](https://job-radar.pages.dev/.well-known/api-catalog): RFC 9727
+  machine-readable resource index for this site.
+
+## Source
+
+- [job-radar](https://github.com/woskam/job-radar): the personal, self-hosted pipeline
+  (scrapers, matching, letter/CV generation, review dashboard). MIT-licensed -- run your
+  own instance.
+- [job-radar-hub](https://github.com/woskam/job-radar-hub): the public read API described
+  above. MIT-licensed.
+- [job-radar-site](https://github.com/woskam/job-radar-site): this site's source.
+
+## Status
+
+Job Radar Hub's API keys are issued by hand for now (no self-serve signup) -- open an
+issue on job-radar-hub to request one. An MCP server for the Hub API is planned but not
+live yet; no MCP server-card is published here until there's a real server behind it.
