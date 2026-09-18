@@ -23,6 +23,9 @@
   same API.
 - [API catalog](https://job-radar-c66.pages.dev/.well-known/api-catalog): RFC 9727
   machine-readable resource index for this site.
+- [MCP server card](https://job-radar-c66.pages.dev/.well-known/mcp/server-card.json):
+  the Hub API over MCP (Streamable HTTP, `search_jobs` tool, same bearer-token auth as
+  the REST API), endpoint `http://136.65.194.129:5301/mcp`.
 
 ## Source
 
@@ -36,5 +39,5 @@
 ## Status
 
 Job Radar Hub's API keys are issued by hand for now (no self-serve signup) -- open an
-issue on job-radar-hub to request one. An MCP server for the Hub API is planned but not
-live yet; no MCP server-card is published here until there's a real server behind it.
+issue on job-radar-hub to request one. The same key works on both the REST API and the
+MCP server.

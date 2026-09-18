@@ -1,0 +1,38 @@
+{
+  "name": "job-radar-hub",
+  "title": "Job Radar Hub",
+  "version": "1.0.0",
+  "description": "Read-only MCP server exposing Job Radar Hub's generic job-listing data via a single search_jobs tool. No personal data -- no relevance scores, no application status, no letters/CVs -- and no apply/send tool, this only ever returns listing data.",
+  "vendor": {
+    "name": "Wychert Oskam",
+    "url": "https://job-radar-c66.pages.dev/"
+  },
+  "license": {
+    "code": "MIT",
+    "content": "MIT",
+    "repo": "https://github.com/woskam/job-radar-hub"
+  },
+  "endpoint": "http://136.65.194.129:5301/mcp",
+  "transport": "http",
+  "protocolVersion": "2025-06-18",
+  "authentication": "bearer",
+  "capabilities": {
+    "tools": true,
+    "prompts": false,
+    "resources": false,
+    "logging": false
+  },
+  "tools": [
+    {
+      "name": "search_jobs",
+      "description": "Search job listings by company, source, title/location substring, and active status."
+    }
+  ],
+  "links": {
+    "site": "https://job-radar-c66.pages.dev/",
+    "apiDocs": "https://job-radar-c66.pages.dev/api",
+    "openapi": "https://job-radar-c66.pages.dev/openapi.json",
+    "getKey": "https://github.com/woskam/job-radar-hub/issues",
+    "source": "https://github.com/woskam/job-radar-hub"
+  }
+}

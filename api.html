@@ -82,6 +82,18 @@
 }</code></pre>
     </div>
 
+    <h2>MCP</h2>
+    <div class="card">
+      <p>The same data, over the Model Context Protocol, for MCP-aware agent clients.</p>
+      <table>
+        <tr><td>Endpoint</td><td><code>http://136.65.194.129:5301/mcp</code></td></tr>
+        <tr><td>Transport</td><td>Streamable HTTP</td></tr>
+        <tr><td>Auth</td><td>Same bearer token as the REST API</td></tr>
+        <tr><td>Tools</td><td><code>search_jobs</code> -- same filters as <code>GET /jobs</code> above</td></tr>
+      </table>
+      <p>Server card: <a href="/.well-known/mcp/server-card.json">/.well-known/mcp/server-card.json</a></p>
+    </div>
+
     <h2>What's not in here</h2>
     <p>
       No relevance scores, no application status, no letters or CVs -- that's all personal

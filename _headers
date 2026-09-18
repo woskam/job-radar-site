@@ -1,0 +1,5 @@
+# Cloudflare Pages custom headers -- https://developers.cloudflare.com/pages/configuration/headers/
+# Advertises the MCP server on every response, per the discoverability
+# pattern documented at https://specification.website/mcp/.
+/*
+  Link: <https://job-radar-c66.pages.dev/.well-known/mcp/server-card.json>; rel="mcp"
