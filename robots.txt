@@ -35,4 +35,4 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://job-radar.pages.dev/sitemap.xml
+Sitemap: https://job-radar-c66.pages.dev/sitemap.xml

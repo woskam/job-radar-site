@@ -18,7 +18,7 @@
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "description": "API key issued by hand -- see https://job-radar.pages.dev/api.html for how to request one."
+        "description": "API key issued by hand -- see https://job-radar-c66.pages.dev/api for how to request one."
       }
     },
     "schemas": {

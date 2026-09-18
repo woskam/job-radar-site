@@ -17,11 +17,11 @@
 
 ## Docs
 
-- [API documentation](https://job-radar.pages.dev/api.html): human-readable guide to the
+- [API documentation](https://job-radar-c66.pages.dev/api): human-readable guide to the
   Job Radar Hub API (auth, endpoints, examples).
-- [OpenAPI spec](https://job-radar.pages.dev/openapi.json): machine-readable spec for the
+- [OpenAPI spec](https://job-radar-c66.pages.dev/openapi.json): machine-readable spec for the
   same API.
-- [API catalog](https://job-radar.pages.dev/.well-known/api-catalog): RFC 9727
+- [API catalog](https://job-radar-c66.pages.dev/.well-known/api-catalog): RFC 9727
   machine-readable resource index for this site.
 
 ## Source
