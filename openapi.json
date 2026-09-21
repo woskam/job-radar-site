@@ -32,7 +32,8 @@
           "location": { "type": "string", "nullable": true },
           "url": { "type": "string", "format": "uri" },
           "description": { "type": "string", "nullable": true },
-          "scraped_at": { "type": "string", "format": "date-time" }
+          "scraped_at": { "type": "string", "format": "date-time", "description": "First-seen time, fixed -- does not move on later sightings" },
+          "last_seen_at": { "type": "string", "format": "date-time", "description": "This Hub's own receive time, updated on every ingest that touches this listing -- the freshness signal" }
         }
       }
     }
