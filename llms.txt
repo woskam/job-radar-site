@@ -17,13 +17,13 @@
 
 ## Docs
 
-- [API documentation](https://job-radar-c66.pages.dev/api): human-readable guide to the
+- [API documentation](https://12getajob.com/api): human-readable guide to the
   Job Radar Hub API (auth, endpoints, examples).
-- [OpenAPI spec](https://job-radar-c66.pages.dev/openapi.json): machine-readable spec for the
+- [OpenAPI spec](https://12getajob.com/openapi.json): machine-readable spec for the
   same API.
-- [API catalog](https://job-radar-c66.pages.dev/.well-known/api-catalog): RFC 9727
+- [API catalog](https://12getajob.com/.well-known/api-catalog): RFC 9727
   machine-readable resource index for this site.
-- [MCP server card](https://job-radar-c66.pages.dev/.well-known/mcp/server-card.json):
+- [MCP server card](https://12getajob.com/.well-known/mcp/server-card.json):
   the Hub API over MCP (Streamable HTTP, `search_jobs` tool, same bearer-token auth as
   the REST API), endpoint `http://136.65.194.129:5301/mcp`.
 

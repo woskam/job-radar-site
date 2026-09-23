@@ -4,41 +4,77 @@
     "title": "Job Radar Hub API",
     "description": "A public, tokengated read API of generic job-listing data, fed by a push from a Job Radar instance's own scrape cycle. Carries no personal data -- no relevance score, no application status, no letters/CVs. No apply/send endpoint, and there never will be one: this API stops at listing data, what you do with it is entirely up to you.",
     "version": "1.0.0",
-    "license": { "name": "MIT", "url": "https://github.com/woskam/job-radar-hub/blob/main/LICENSE" }
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/woskam/job-radar-hub/blob/main/LICENSE"
+    }
   },
   "externalDocs": {
     "description": "Source code",
     "url": "https://github.com/woskam/job-radar-hub"
   },
   "servers": [
-    { "url": "https://job-radar-hub.example", "description": "Replace with the real hub instance's base URL" }
+    {
+      "url": "https://hub.12getajob.com",
+      "description": "Job Radar Hub"
+    }
   ],
   "components": {
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "description": "API key issued by hand -- see https://job-radar-c66.pages.dev/api for how to request one."
+        "description": "API key issued by hand -- see https://12getajob.com/api for how to request one."
       }
     },
     "schemas": {
       "Listing": {
         "type": "object",
         "properties": {
-          "source": { "type": "string", "description": "ATS platform / scraper source identifier" },
-          "external_id": { "type": "string" },
-          "title": { "type": "string" },
-          "company": { "type": "string" },
-          "location": { "type": "string", "nullable": true },
-          "url": { "type": "string", "format": "uri" },
-          "description": { "type": "string", "nullable": true },
-          "scraped_at": { "type": "string", "format": "date-time", "description": "First-seen time, fixed -- does not move on later sightings" },
-          "last_seen_at": { "type": "string", "format": "date-time", "description": "This Hub's own receive time, updated on every ingest that touches this listing -- the freshness signal" }
+          "source": {
+            "type": "string",
+            "description": "ATS platform / scraper source identifier"
+          },
+          "external_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "scraped_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "First-seen time, fixed -- does not move on later sightings"
+          },
+          "last_seen_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "This Hub's own receive time, updated on every ingest that touches this listing -- the freshness signal"
+          }
         }
       }
     }
   },
-  "security": [{ "bearerAuth": [] }],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
   "paths": {
     "/health": {
       "get": {
@@ -47,7 +83,18 @@
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string" } } } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -56,13 +103,68 @@
       "get": {
         "summary": "List/filter job listings",
         "parameters": [
-          { "name": "company", "in": "query", "schema": { "type": "string" }, "description": "Exact company name match" },
-          { "name": "source", "in": "query", "schema": { "type": "string" }, "description": "Exact source/ATS name match" },
-          { "name": "title_contains", "in": "query", "schema": { "type": "string" }, "description": "Substring match on title" },
-          { "name": "location_contains", "in": "query", "schema": { "type": "string" }, "description": "Substring match on location" },
-          { "name": "active", "in": "query", "schema": { "type": "integer", "enum": [0, 1], "default": 1 }, "description": "1 (default) = currently live, 0 = no longer seen in the latest scrape" },
-          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 50, "maximum": 200 } },
-          { "name": "offset", "in": "query", "schema": { "type": "integer", "default": 0 } }
+          {
+            "name": "company",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact company name match"
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Exact source/ATS name match"
+          },
+          {
+            "name": "title_contains",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Substring match on title"
+          },
+          {
+            "name": "location_contains",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Substring match on location"
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ],
+              "default": 1
+            },
+            "description": "1 (default) = currently live, 0 = no longer seen in the latest scrape"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -72,15 +174,26 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "count": { "type": "integer" },
-                    "results": { "type": "array", "items": { "$ref": "#/components/schemas/Listing" } }
+                    "count": {
+                      "type": "integer"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Listing"
+                      }
+                    }
                   }
                 }
               }
             }
           },
-          "401": { "description": "Missing or invalid API key" },
-          "429": { "description": "Rate limit exceeded for this key" }
+          "401": {
+            "description": "Missing or invalid API key"
+          },
+          "429": {
+            "description": "Rate limit exceeded for this key"
+          }
         }
       }
     }

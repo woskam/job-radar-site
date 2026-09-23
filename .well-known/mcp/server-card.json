@@ -5,7 +5,7 @@
   "description": "Read-only MCP server exposing Job Radar Hub's generic job-listing data via a single search_jobs tool. No personal data -- no relevance scores, no application status, no letters/CVs -- and no apply/send tool, this only ever returns listing data.",
   "vendor": {
     "name": "Wychert Oskam",
-    "url": "https://job-radar-c66.pages.dev/"
+    "url": "https://12getajob.com/"
   },
   "license": {
     "code": "MIT",
@@ -29,9 +29,9 @@
     }
   ],
   "links": {
-    "site": "https://job-radar-c66.pages.dev/",
-    "apiDocs": "https://job-radar-c66.pages.dev/api",
-    "openapi": "https://job-radar-c66.pages.dev/openapi.json",
+    "site": "https://12getajob.com/",
+    "apiDocs": "https://12getajob.com/api",
+    "openapi": "https://12getajob.com/openapi.json",
     "getKey": "https://github.com/woskam/job-radar-hub/issues",
     "source": "https://github.com/woskam/job-radar-hub"
   }

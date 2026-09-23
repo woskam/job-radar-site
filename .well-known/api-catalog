@@ -1,17 +1,17 @@
 {
   "linkset": [
     {
-      "anchor": "https://job-radar-c66.pages.dev/",
+      "anchor": "https://12getajob.com/",
       "describedby": [
         {
-          "href": "https://job-radar-c66.pages.dev/llms.txt",
+          "href": "https://12getajob.com/llms.txt",
           "type": "text/markdown",
           "title": "Site index for LLMs"
         }
       ],
       "sitemap": [
         {
-          "href": "https://job-radar-c66.pages.dev/sitemap.xml",
+          "href": "https://12getajob.com/sitemap.xml",
           "type": "application/xml",
           "title": "URL sitemap"
         }
@@ -27,14 +27,14 @@
       "anchor": "job-radar-hub-api",
       "service-desc": [
         {
-          "href": "https://job-radar-c66.pages.dev/openapi.json",
+          "href": "https://12getajob.com/openapi.json",
           "type": "application/json",
           "title": "OpenAPI 3.0 spec for the Job Radar Hub API"
         }
       ],
       "service-doc": [
         {
-          "href": "https://job-radar-c66.pages.dev/api",
+          "href": "https://12getajob.com/api",
           "type": "text/html",
           "title": "Human-readable API documentation"
         }
@@ -61,14 +61,14 @@
       "anchor": "http://136.65.194.129:5301/mcp",
       "service-desc": [
         {
-          "href": "https://job-radar-c66.pages.dev/.well-known/mcp/server-card.json",
+          "href": "https://12getajob.com/.well-known/mcp/server-card.json",
           "type": "application/json",
           "title": "MCP server card"
         }
       ],
       "service-doc": [
         {
-          "href": "https://job-radar-c66.pages.dev/api",
+          "href": "https://12getajob.com/api",
           "type": "text/html",
           "title": "Human-readable API documentation (same data, MCP or REST)"
         }

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Job Radar Hub API</title>
   <meta name="description" content="API documentation for Job Radar Hub: a public, tokengated read API of job listings.">
-  <link rel="canonical" href="https://job-radar-c66.pages.dev/api">
+  <link rel="canonical" href="https://12getajob.com/api">
   <link rel="stylesheet" href="/assets/style.css">
   <script type="module" src="/assets/analytics.js"></script>
 </head>
@@ -46,7 +46,7 @@
     <div class="card">
       <h3><code>GET /health</code></h3>
       <p>No auth required. Liveness check.</p>
-      <pre><code>curl https://job-radar-hub.example/health
+      <pre><code>curl https://hub.12getajob.com/health
 &rarr; {"status": "ok"}</code></pre>
     </div>
 
@@ -63,7 +63,7 @@
         <tr><td><code>limit</code></td><td>Default 50, max 200</td></tr>
         <tr><td><code>offset</code></td><td>Default 0</td></tr>
       </table>
-      <pre><code>curl "https://job-radar-hub.example/jobs?company=Adyen&location_contains=Amsterdam" \
+      <pre><code>curl "https://hub.12getajob.com/jobs?company=Adyen&location_contains=Amsterdam" \
   -H "Authorization: Bearer $API_KEY"
 
 &rarr; {
