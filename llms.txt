@@ -1,17 +1,27 @@
-# Job Radar
+# 12GetAJob
 
-> Job Radar is a self-hosted, open-source job-search automation tool. Job Radar Hub is a
-> separate, public, tokengated read API serving the generic (non-personal) job-listing
-> data a Job Radar instance's scrape cycle finds.
+> 12GetAJob is a job search site: search/browse live listings and save a search as a daily
+> email alert. It's built on Job Radar, a self-hosted, open-source job-search automation
+> tool, and Job Radar Hub, a separate public, tokengated read API serving the generic
+> (non-personal) job-listing data Job Radar's scrape cycle finds.
 
 ## What this is
 
+- [/jobs](https://12getajob.com/jobs): search/browse live listings -- keyword, category,
+  segment, location/remote.
+- [/alerts](https://12getajob.com/alerts): save a search, get a daily email when new
+  matching listings appear. Double opt-in, one-click unsubscribe.
+- [/companies](https://12getajob.com/companies): every company tracked, filterable the
+  same way.
 - Job Radar scrapes career pages across 100+ companies (Workday, Greenhouse,
   SmartRecruiters, SAP SuccessFactors, and more), scores matches against a person's own
   profile, and drafts cover letters/CVs with an LLM -- with a human reviewing everything
-  before anything is sent. Nothing is ever sent automatically.
+  before anything is sent. Nothing is ever sent automatically. This part is personal/
+  self-hosted, not part of 12GetAJob's own public data.
 - Job Radar Hub carries none of that personal data. It only serves generic listing fields:
-  source, external_id, title, company, location, url, description, scraped_at.
+  source, external_id, title, company, location, url, description, scraped_at, category,
+  segment. The one exception is email-alerts subscriber data (an email address + saved
+  search), double opt-in and self-service unsubscribe throughout.
 - Neither this site nor the Hub API has, or will ever have, an "apply" or "send" endpoint.
   This stops at listing data -- what you do with it is entirely up to you.
 
@@ -26,6 +36,7 @@
 - [MCP server card](https://12getajob.com/.well-known/mcp/server-card.json):
   the Hub API over MCP (Streamable HTTP, `search_jobs` tool, same bearer-token auth as
   the REST API), endpoint `http://136.65.194.129:5301/mcp`.
+- [For developers](https://12getajob.com/developers): overview of Job Radar/Job Radar Hub/MCP.
 
 ## Source
 
@@ -38,6 +49,6 @@
 
 ## Status
 
-Job Radar Hub's API keys are issued by hand for now (no self-serve signup) -- open an
+Job Radar Hub's read-API keys are issued by hand for now (no self-serve signup) -- open an
 issue on job-radar-hub to request one. The same key works on both the REST API and the
-MCP server.
+MCP server. Email alerts (a narrower capability) are fully self-service via /alerts.

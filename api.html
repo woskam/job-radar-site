@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Job Radar Hub API</title>
+  <title>12GetAJob API</title>
   <meta name="description" content="API documentation for Job Radar Hub: a public, tokengated read API of job listings.">
   <link rel="canonical" href="https://12getajob.com/api">
   <link rel="stylesheet" href="/assets/style.css">
@@ -12,12 +12,12 @@
 <body>
   <div class="wrap">
     <header class="site-header">
-      <a href="/">Job Radar</a>
+      <a href="/">12GetAJob</a>
       <nav>
+        <a href="/jobs">Jobs</a>
         <a href="/companies">Companies</a>
-        <a href="/api">API docs</a>
-        <a href="https://github.com/woskam/job-radar">Open source</a>
-        <a href="https://github.com/woskam/job-radar-hub">Hub source</a>
+        <a href="/alerts">Alerts</a>
+        <a href="/developers">For developers</a>
       </nav>
     </header>
 
@@ -59,6 +59,8 @@
         <tr><td><code>source</code></td><td>Exact source/ATS name match</td></tr>
         <tr><td><code>title_contains</code></td><td>Substring match on title</td></tr>
         <tr><td><code>location_contains</code></td><td>Substring match on location</td></tr>
+        <tr><td><code>category</code></td><td>Exact match, e.g. <code>fintech</code> (same vocabulary as <a href="/companies">/companies</a>)</td></tr>
+        <tr><td><code>segment</code></td><td>Exact match -- currently just <code>startup</code> or omitted</td></tr>
         <tr><td><code>active</code></td><td><code>1</code> (default) or <code>0</code> -- inactive listings are ones no longer seen in the source's latest scrape</td></tr>
         <tr><td><code>limit</code></td><td>Default 50, max 200</td></tr>
         <tr><td><code>offset</code></td><td>Default 0</td></tr>
@@ -78,6 +80,8 @@
       "url": "https://...",
       "description": "...",
       "scraped_at": "2026-09-18T08:00:00+00:00",
+      "category": "tech",
+      "segment": null,
       "last_seen_at": "2026-09-21T08:00:00+00:00"
     }
   ]

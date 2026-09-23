@@ -6,6 +6,8 @@
   --border: #e2e2e2;
   --accent: #1e5a8a;
   --code-bg: #f4f4f4;
+  --hero-bg: #eef4fa;
+  --badge-bg: #eef4fa;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -15,6 +17,8 @@
     --border: #2c2f36;
     --accent: #6fb3e8;
     --code-bg: #1d2025;
+    --hero-bg: #1a2530;
+    --badge-bg: #1e2b38;
   }
 }
 
@@ -32,6 +36,29 @@ body {
   max-width: 760px;
   margin: 0 auto;
   padding: 48px 20px 80px;
+}
+.wrap.wide { max-width: 920px; }
+
+/* Hero -- full-bleed band behind the headline + filter bar, used on the
+   homepage and /jobs.html. Kept to a flat tint + accent underline rather
+   than a gradient/illustration -- still plain CSS, no image assets, but
+   enough visual weight to read as a product, not a docs page. Not nested
+   inside .wrap -- it's its own full-width block with its own inner
+   max-width container, so .wrap's side padding never doubles up. */
+.hero {
+  width: 100%;
+  background: var(--hero-bg);
+  border-bottom: 3px solid var(--accent);
+}
+.hero-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 56px 20px 40px;
+}
+.hero h1 { font-size: 40px; max-width: 15ch; }
+.hero p.tagline { font-size: 18px; max-width: 46ch; }
+@media (max-width: 480px) {
+  .hero h1 { font-size: 30px; }
 }
 
 header.site-header {
@@ -101,6 +128,42 @@ button {
   align-self: flex-start;
 }
 button:hover { opacity: 0.9; }
+
+.job-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin: 12px 0;
+}
+.job-card h3 { margin: 0 0 4px; font-size: 16.5px; }
+.job-card .meta { color: var(--muted); font-size: 14px; margin-bottom: 8px; }
+.job-card .badges { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--badge-bg);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 24px 0;
+  font-size: 14px;
+}
+.pagination button:disabled { opacity: 0.4; cursor: default; }
+
+.muted-section {
+  background: var(--code-bg);
+  border-radius: 10px;
+  padding: 20px 22px;
+  margin: 20px 0;
+}
+.muted-section h2 { margin-top: 0; border-top: none; padding-top: 0; }
 
 table { border-collapse: collapse; width: 100%; font-size: 14px; }
 th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }

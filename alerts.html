@@ -3,39 +3,132 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Job Radar Alerts</title>
+  <title>12GetAJob Alerts</title>
   <meta name="description" content="Get a daily email when new job listings match your saved search.">
-  <meta name="robots" content="noindex">
   <link rel="canonical" href="https://12getajob.com/alerts">
   <link rel="stylesheet" href="/assets/style.css">
   <script type="module" src="/assets/analytics.js"></script>
 </head>
 <body>
-  <div class="wrap">
-    <header class="site-header">
-      <a href="/">Job Radar</a>
-      <nav>
-        <a href="/companies">Companies</a>
-        <a href="/api">API docs</a>
-        <a href="https://github.com/woskam/job-radar">Open source</a>
-        <a href="https://github.com/woskam/job-radar-hub">Hub source</a>
-      </nav>
-    </header>
+  <div class="hero">
+    <div class="hero-inner">
+      <header class="site-header">
+        <a href="/">12GetAJob</a>
+        <nav>
+          <a href="/jobs">Jobs</a>
+          <a href="/companies">Companies</a>
+          <a href="/alerts">Alerts</a>
+          <a href="/developers">For developers</a>
+        </nav>
+      </header>
 
-    <h1>Email alerts</h1>
-    <p class="tagline">Save a search, get a daily email when new matching listings appear. No account, no password -- just an email and an unsubscribe link in every message.</p>
-
-    <div class="card">
-      <p>
-        The signup form lives directly on Job Radar Hub rather than here --
-        same project, same data, just a different page.
-      </p>
-      <p><a href="https://hub.12getajob.com/alerts">Set up an alert &rarr;</a></p>
+      <h1>Email alerts</h1>
+      <p class="tagline">Save a search, get a daily email when new matching listings appear. No account, no password -- just an email and an unsubscribe link in every message.</p>
     </div>
+  </div>
+
+  <div class="wrap">
+    <form id="alerts-form">
+      <div class="filters" style="flex-direction: column; align-items: stretch;">
+        <input type="email" id="email" placeholder="you@example.com" required>
+
+        <input type="text" id="keywords" placeholder="Keywords, comma-separated (e.g. backend, platform engineer)">
+        <input type="text" id="exclude-keywords" placeholder="Exclude keywords, comma-separated (e.g. senior, intern)">
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <input type="text" id="location" placeholder="Location (e.g. Amsterdam)" style="flex:1 1 200px;">
+          <label style="display:flex; align-items:center; gap:6px; font-size:14px;">
+            <input type="checkbox" id="remote-only"> Remote only
+          </label>
+        </div>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <select id="category" style="flex:1 1 160px;">
+            <option value="">Any category</option>
+          </select>
+          <select id="segment" style="flex:1 1 160px;">
+            <option value="">Any segment</option>
+            <option value="startup">Startups &amp; scale-ups only</option>
+          </select>
+          <input type="text" id="company" placeholder="Company (optional)" style="flex:1 1 160px;">
+        </div>
+
+        <!-- Honeypot -- hidden from real visitors via CSS, a bot filling
+             every field it finds gets silently rejected server-side. -->
+        <input type="text" id="website" name="website" autocomplete="off" tabindex="-1" style="position:absolute; left:-9999px;">
+
+        <button type="submit">Subscribe</button>
+      </div>
+    </form>
+    <p id="form-message" class="tagline" style="min-height: 1.2em;"></p>
 
     <p style="font-size: 13px; color: var(--muted);">
+      Prefer no JavaScript? Use the <a href="https://hub.12getajob.com/alerts">plain form</a> instead.
       See <a href="/privacy">privacy</a> for what's collected and how to stop it.
     </p>
+
+    <footer>
+      <a href="https://github.com/woskam/job-radar">job-radar</a> ·
+      <a href="https://github.com/woskam/job-radar-hub">job-radar-hub</a> ·
+      <a href="https://github.com/woskam/job-radar-site">this site's source</a>
+    </footer>
   </div>
+
+  <script>
+    const CATEGORIES = ["ai_ml","b2b","banking","beauty","climate","consulting","consumer","crypto","devtools","ecommerce","education","enterprise","fashion","fintech","fmcg","government","healthcare","healthtech","industrials","insurance","marketplace","mobility","other","overheid","pharma","real_estate_and_construction","resilience","saas","semiconductor","sportswear","staffing","tech","telecom"];
+    const categorySelect = document.getElementById('category');
+    for (const c of CATEGORIES) {
+      const opt = document.createElement('option');
+      opt.value = c; opt.textContent = c;
+      categorySelect.appendChild(opt);
+    }
+
+    // Prefill from query params -- lets /jobs.html hand off "get alerts
+    // for this search" with the same filters already set.
+    const initial = new URLSearchParams(window.location.search);
+    if (initial.get('keywords')) document.getElementById('keywords').value = initial.get('keywords');
+    if (initial.get('category')) categorySelect.value = initial.get('category');
+    if (initial.get('segment')) document.getElementById('segment').value = initial.get('segment');
+    if (initial.get('location_mode') === 'remote') document.getElementById('remote-only').checked = true;
+    else if (initial.get('location_mode')) document.getElementById('location').value = initial.get('location_mode');
+
+    const form = document.getElementById('alerts-form');
+    const message = document.getElementById('form-message');
+
+    function splitList(value) {
+      return value.split(',').map((s) => s.trim()).filter(Boolean);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const remoteOnly = document.getElementById('remote-only').checked;
+      const locationText = document.getElementById('location').value.trim();
+
+      const body = {
+        email: document.getElementById('email').value.trim(),
+        keywords: splitList(document.getElementById('keywords').value),
+        exclude_keywords: splitList(document.getElementById('exclude-keywords').value),
+        location_mode: remoteOnly ? 'remote' : (locationText || null),
+        category: categorySelect.value || null,
+        segment: document.getElementById('segment').value || null,
+        company: document.getElementById('company').value.trim() || null,
+        website: document.getElementById('website').value,
+      };
+
+      message.textContent = 'Submitting...';
+      try {
+        const resp = await fetch('https://hub.12getajob.com/alerts/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+        const data = await resp.json();
+        message.textContent = data.message || data.error || 'Something went wrong, try again.';
+        if (resp.ok) form.reset();
+      } catch {
+        message.textContent = 'Could not reach the alerts service, try again shortly.';
+      }
+    });
+  </script>
 </body>
 </html>
