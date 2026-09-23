@@ -88,6 +88,20 @@ pre code { padding: 0; background: none; }
 }
 .filters input { flex: 1 1 200px; }
 
+button {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  padding: 9px 16px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+button:hover { opacity: 0.9; }
+
 table { border-collapse: collapse; width: 100%; font-size: 14px; }
 th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
 th { color: var(--muted); font-weight: 600; }

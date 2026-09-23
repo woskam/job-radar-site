@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Job Radar Privacy</title>
+  <meta name="description" content="What Job Radar's email alerts feature collects and why.">
+  <link rel="canonical" href="https://job-radar-c66.pages.dev/privacy">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script type="module" src="/assets/analytics.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <a href="/">Job Radar</a>
+      <nav>
+        <a href="/companies">Companies</a>
+        <a href="/api">API docs</a>
+        <a href="https://github.com/woskam/job-radar">Open source</a>
+        <a href="https://github.com/woskam/job-radar-hub">Hub source</a>
+      </nav>
+    </header>
+
+    <h1>Privacy</h1>
+    <p class="tagline">Short version: email alerts are the only place this project stores anything personal, and it's easy to leave.</p>
+
+    <h2>Job listing data</h2>
+    <p>
+      The job listings this site and <a href="/api">Job Radar Hub</a> serve are generic and
+      public: title, company, location, a URL, a description. None of it is personal data,
+      and none of it is about you.
+    </p>
+
+    <h2>Email alerts</h2>
+    <p>If you sign up for <a href="/alerts">email alerts</a>, this is collected:</p>
+    <ul>
+      <li>Your email address.</li>
+      <li>The search you saved (keywords, location, category, segment, company) -- used only to decide which listings to email you about.</li>
+    </ul>
+    <p>
+      Signup is double opt-in: nothing is sent until you click the confirm link in the
+      first email. Every alert email includes an unsubscribe link that works immediately,
+      no login required. If you never confirm, the pending signup is deleted automatically
+      after 7 days.
+    </p>
+    <p>
+      Alerts are sent via <a href="https://resend.com">Resend</a>, a transactional email
+      provider -- your email address and saved search are shared with them only to the
+      extent needed to deliver the message.
+    </p>
+    <p>
+      To have your data removed at any time, unsubscribe from the link in any alert email,
+      or <a href="https://github.com/woskam/job-radar-hub/issues">open an issue</a> asking
+      for it to be deleted directly.
+    </p>
+
+    <h2>Analytics</h2>
+    <p>
+      This site measures traffic (including non-browser/agent traffic) via Google
+      Analytics -- see <a href="https://github.com/woskam/job-radar-site">this site's
+      source</a> for exactly how. No personal data is intentionally collected there either.
+    </p>
+
+    <footer>
+      <a href="https://github.com/woskam/job-radar">job-radar</a> ·
+      <a href="https://github.com/woskam/job-radar-hub">job-radar-hub</a> ·
+      <a href="https://github.com/woskam/job-radar-site">this site's source</a>
+    </footer>
+  </div>
+</body>
+</html>
