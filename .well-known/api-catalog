@@ -58,7 +58,7 @@
       ]
     },
     {
-      "anchor": "http://136.65.194.129:5301/mcp",
+      "anchor": "https://mcp.12getajob.com/mcp",
       "service-desc": [
         {
           "href": "https://12getajob.com/.well-known/mcp/server-card.json",

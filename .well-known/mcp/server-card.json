@@ -12,7 +12,7 @@
     "content": "MIT",
     "repo": "https://github.com/woskam/job-radar-hub"
   },
-  "endpoint": "http://136.65.194.129:5301/mcp",
+  "endpoint": "https://mcp.12getajob.com/mcp",
   "transport": "http",
   "protocolVersion": "2025-06-18",
   "authentication": "bearer",

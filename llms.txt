@@ -35,7 +35,7 @@
   machine-readable resource index for this site.
 - [MCP server card](https://12getajob.com/.well-known/mcp/server-card.json):
   the Hub API over MCP (Streamable HTTP, `search_jobs` tool, same bearer-token auth as
-  the REST API), endpoint `http://136.65.194.129:5301/mcp`.
+  the REST API), endpoint `https://mcp.12getajob.com/mcp`.
 - [For developers](https://12getajob.com/developers): overview of Job Radar/Job Radar Hub/MCP.
 
 ## Source
