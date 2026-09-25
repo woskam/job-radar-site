@@ -1,11 +1,10 @@
-// Shared config for both client-side (assets/analytics.js) and server-side
-// (functions/_middleware.js) analytics -- a plain ES module, imported by
-// both, so there's exactly one place to update. Placeholders on purpose --
-// the site works fine with these left as-is (GA simply has nowhere real to
-// send events), swap in the real values later and redeploy, nothing else
-// needs to change.
+// Shared config for client-side analytics (assets/analytics.js). Only the
+// GA4 Measurement ID lives here -- this file is served as a public static
+// asset, so nothing secret can go in it. The Measurement Protocol API
+// secret used by functions/_middleware.js is read from the GA_API_SECRET
+// Cloudflare Pages environment variable instead (Pages project -> Settings
+// -> Environment variables, add as a secret) -- never from a file in this
+// repo.
 //
 // GA_MEASUREMENT_ID: GA4 admin -> Data Streams -> your stream -> "Measurement ID" (G-XXXXXXXXXX)
-// GA_API_SECRET: GA4 admin -> Data Streams -> your stream -> Measurement Protocol API secrets -> Create
 export const GA_MEASUREMENT_ID = "G-7RZW9W8N1T";
-export const GA_API_SECRET = "d1BbAoBeSs2LN0jNG2vlwA";

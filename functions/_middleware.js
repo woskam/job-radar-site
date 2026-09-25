@@ -5,7 +5,7 @@
 // fetching llms.txt / openapi.json / .well-known/api-catalog. This sees
 // every request regardless, via GA4's Measurement Protocol (a plain
 // server-to-server HTTP call, no browser involved).
-import { GA_MEASUREMENT_ID, GA_API_SECRET } from "../assets/config.js";
+import { GA_MEASUREMENT_ID } from "../assets/config.js";
 
 // Paths worth distinguishing from a generic page_view -- these are exactly
 // the files an agent (not a human) is likely to fetch directly.
@@ -29,12 +29,12 @@ function clientIdFrom(request) {
   return crypto.randomUUID();
 }
 
-async function sendMeasurementEvent(request, url) {
-  if (GA_MEASUREMENT_ID === "G-PLACEHOLDER" || GA_API_SECRET === "PLACEHOLDER") {
-    return; // nowhere real to send this yet -- see assets/config.js
+async function sendMeasurementEvent(request, url, apiSecret) {
+  if (GA_MEASUREMENT_ID === "G-PLACEHOLDER" || !apiSecret) {
+    return; // no GA_API_SECRET Pages env var configured yet -- see assets/config.js
   }
   const eventName = DOWNLOAD_EVENT_PATHS[url.pathname] || "page_view";
-  const endpoint = `https://www.google-analytics.com/mp/collect?measurement_id=${GA_MEASUREMENT_ID}&api_secret=${GA_API_SECRET}`;
+  const endpoint = `https://www.google-analytics.com/mp/collect?measurement_id=${GA_MEASUREMENT_ID}&api_secret=${apiSecret}`;
   const body = {
     client_id: clientIdFrom(request),
     events: [{
@@ -56,6 +56,6 @@ async function sendMeasurementEvent(request, url) {
 export async function onRequest(context) {
   const response = await context.next();
   const url = new URL(context.request.url);
-  context.waitUntil(sendMeasurementEvent(context.request, url));
+  context.waitUntil(sendMeasurementEvent(context.request, url, context.env.GA_API_SECRET));
   return response;
 }
