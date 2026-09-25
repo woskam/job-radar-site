@@ -1,5 +1,13 @@
 # Cloudflare Pages custom headers -- https://developers.cloudflare.com/pages/configuration/headers/
 # Advertises the MCP server on every response, per the discoverability
 # pattern documented at https://specification.website/mcp/.
+#
+# Strict-Transport-Security and the clickjacking headers below are the two
+# required items from specification.website/spec/security/ that Cloudflare
+# Pages does not set by default (unlike X-Content-Type-Options and
+# Referrer-Policy, which it already adds automatically).
 /*
   Link: <https://12getajob.com/.well-known/mcp/server-card.json>; rel="mcp"
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Frame-Options: DENY
+  Content-Security-Policy: frame-ancestors 'none'
