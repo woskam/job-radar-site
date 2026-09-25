@@ -4,69 +4,80 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <title>12GetAJob</title>
   <meta name="description" content="Search live job listings and get a daily email when new ones match your saved search.">
-  <meta name="google-site-verification" content="PLACEHOLDER_REPLACE_ME">
+  <meta name="theme-color" content="#1e5a8a" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#6fb3e8" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://12getajob.com/">
+  <meta property="og:title" content="12GetAJob">
+  <meta property="og:description" content="Search live job listings and get a daily email when new ones match your saved search.">
   <link rel="canonical" href="https://12getajob.com/">
   <link rel="stylesheet" href="/assets/style.css">
   <script type="module" src="/assets/analytics.js"></script>
 </head>
 <body>
-  <div class="hero">
-    <div class="hero-inner">
-      <header class="site-header">
-        <a href="/">12GetAJob</a>
-        <nav>
-          <a href="/jobs">Jobs</a>
-          <a href="/companies">Companies</a>
-          <a href="/alerts">Alerts</a>
-          <a href="/developers">For developers</a>
-        </nav>
-      </header>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <main id="main-content">
+    <div class="hero">
+      <div class="hero-inner">
+        <header class="site-header" role="banner">
+          <a href="/">12GetAJob</a>
+          <nav>
+            <a href="/jobs">Jobs</a>
+            <a href="/companies">Companies</a>
+            <a href="/alerts">Alerts</a>
+            <a href="/developers">For developers</a>
+          </nav>
+        </header>
 
-      <h1>Find your next job. Get emailed when new ones match.</h1>
-      <p class="tagline">Search live listings from Workday, Greenhouse, and hundreds of YC/VC-backed startups -- then save the search as a daily email alert.</p>
+        <h1>Find your next job. Get emailed when new ones match.</h1>
+        <p class="tagline">Search live listings from Workday, Greenhouse, and hundreds of YC/VC-backed startups -- then save the search as a daily email alert.</p>
 
-      <form id="search-form">
-        <div class="filters">
-          <input type="search" id="q" placeholder="Job title or keyword&hellip;">
-          <select id="category-filter"><option value="">Any category</option></select>
-          <div style="display:flex; gap:8px; flex:1 1 220px;">
-            <input type="text" id="location" placeholder="Location">
-            <label style="display:flex; align-items:center; gap:6px; font-size:14px; white-space:nowrap;">
-              <input type="checkbox" id="remote-only"> Remote
-            </label>
+        <form id="search-form">
+          <div class="filters">
+            <input type="search" id="q" placeholder="Job title or keyword&hellip;" aria-label="Job title or keyword">
+            <select id="category-filter" aria-label="Category"><option value="">Any category</option></select>
+            <div style="display:flex; gap:8px; flex:1 1 220px;">
+              <input type="text" id="location" placeholder="Location" aria-label="Location">
+              <label style="display:flex; align-items:center; gap:6px; font-size:14px; white-space:nowrap;">
+                <input type="checkbox" id="remote-only"> Remote
+              </label>
+            </div>
+            <button type="submit">Search jobs</button>
           </div>
-          <button type="submit">Search jobs</button>
-        </div>
-      </form>
-      <p style="margin:0;"><a href="/alerts">Or skip straight to setting up an alert &rarr;</a></p>
-    </div>
-  </div>
-
-  <div class="wrap">
-    <h2 style="border-top:none; margin-top:0; padding-top:0;">How it works</h2>
-    <div class="card"><h3>1. Search or browse</h3><p>Filter by keyword, category, segment, and location across every listing 12GetAJob tracks.</p></div>
-    <div class="card"><h3>2. Save it as an alert</h3><p>One click carries your filters over -- add an email, confirm, done.</p></div>
-    <div class="card"><h3>3. Get a daily email</h3><p>Only new matches since the last one. Unsubscribe any time, one click, no login.</p></div>
-
-    <div class="muted-section">
-      <h2>Open source underneath</h2>
-      <p>
-        12GetAJob is built on <a href="https://github.com/woskam/job-radar">Job Radar</a>, a
-        self-hosted job-search pipeline, and <a href="https://github.com/woskam/job-radar-hub">Job Radar Hub</a>,
-        its public API and MCP server. Both are open source, and you can self-host the whole thing yourself.
-      </p>
-      <p><a href="/developers">For developers &rarr;</a></p>
+        </form>
+        <p style="margin:0;"><a href="/alerts">Or skip straight to setting up an alert &rarr;</a></p>
+      </div>
     </div>
 
-    <footer>
-      <a href="https://github.com/woskam/job-radar">job-radar</a> ·
-      <a href="https://github.com/woskam/job-radar-hub">job-radar-hub</a> ·
-      <a href="https://github.com/woskam/job-radar-site">this site's source</a> ·
-      <a href="/privacy">privacy</a>
-    </footer>
-  </div>
+    <div class="wrap">
+      <h2 style="border-top:none; margin-top:0; padding-top:0;">How it works</h2>
+      <div class="card"><h3>1. Search or browse</h3><p>Filter by keyword, category, segment, and location across every listing 12GetAJob tracks.</p></div>
+      <div class="card"><h3>2. Save it as an alert</h3><p>One click carries your filters over -- add an email, confirm, done.</p></div>
+      <div class="card"><h3>3. Get a daily email</h3><p>Only new matches since the last one. Unsubscribe any time, one click, no login.</p></div>
+
+      <div class="muted-section">
+        <h2>Open source underneath</h2>
+        <p>
+          12GetAJob is built on <a href="https://github.com/woskam/job-radar">Job Radar</a>, a
+          self-hosted job-search pipeline, and <a href="https://github.com/woskam/job-radar-hub">Job Radar Hub</a>,
+          its public API and MCP server. Both are open source, and you can self-host the whole thing yourself.
+        </p>
+        <p><a href="/developers">For developers &rarr;</a></p>
+      </div>
+
+      <footer role="contentinfo">
+        <a href="https://github.com/woskam/job-radar">job-radar</a> ·
+        <a href="https://github.com/woskam/job-radar-hub">job-radar-hub</a> ·
+        <a href="https://github.com/woskam/job-radar-site">this site's source</a> ·
+        <a href="/privacy">privacy</a>
+      </footer>
+    </div>
+  </main>
 
   <script>
     const CATEGORIES = ["ai_ml","b2b","banking","beauty","climate","consulting","consumer","crypto","devtools","ecommerce","education","enterprise","fashion","fintech","fmcg","government","healthcare","healthtech","industrials","insurance","marketplace","mobility","other","overheid","pharma","real_estate_and_construction","resilience","saas","semiconductor","sportswear","staffing","tech","telecom"];

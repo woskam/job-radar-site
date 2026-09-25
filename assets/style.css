@@ -71,8 +71,42 @@ header.site-header {
 }
 
 header.site-header a { color: var(--text); text-decoration: none; font-weight: 700; font-size: 18px; }
-header.site-header nav a { font-weight: 400; font-size: 14px; color: var(--muted); margin-left: 18px; }
+header.site-header nav a {
+  display: inline-block;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--muted);
+  margin-left: 18px;
+  padding: 6px 0;
+}
 header.site-header nav a:hover { color: var(--accent); }
+
+/* Visually hidden but focusable -- used for the skip link, which must
+   appear on-screen when focused, and .sr-only, which must never appear. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: 0.5em 1em;
+  background: var(--bg);
+  color: var(--text);
+  z-index: 100;
+}
+.skip-link:focus {
+  left: 0.5em;
+  top: 0.5em;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 h1 { font-size: 32px; letter-spacing: -0.02em; margin-bottom: 4px; }
 h2 { font-size: 20px; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 28px; }

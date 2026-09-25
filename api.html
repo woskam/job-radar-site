@@ -4,13 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <title>12GetAJob API</title>
   <meta name="description" content="API documentation for Job Radar Hub: a public, tokengated read API of job listings.">
+  <meta name="theme-color" content="#1e5a8a" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#6fb3e8" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://12getajob.com/api">
+  <meta property="og:title" content="12GetAJob API">
+  <meta property="og:description" content="API documentation for Job Radar Hub: a public, tokengated read API of job listings.">
   <link rel="canonical" href="https://12getajob.com/api">
   <link rel="stylesheet" href="/assets/style.css">
   <script type="module" src="/assets/analytics.js"></script>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <div class="wrap">
     <header class="site-header">
       <a href="/">12GetAJob</a>
@@ -22,6 +32,7 @@
       </nav>
     </header>
 
+    <main id="main-content">
     <h1>Job Radar Hub API</h1>
     <p class="tagline">A public, tokengated read API of generic job-listing data.</p>
 
@@ -55,7 +66,8 @@
       <h3><code>GET /jobs</code></h3>
       <p>Returns matching listings. All query parameters are optional.</p>
       <table>
-        <tr><th>Param</th><th>Meaning</th></tr>
+        <caption class="sr-only">GET /jobs query parameters</caption>
+        <tr><th scope="col">Param</th><th scope="col">Meaning</th></tr>
         <tr><td><code>company</code></td><td>Exact company name match</td></tr>
         <tr><td><code>source</code></td><td>Exact source/ATS name match</td></tr>
         <tr><td><code>title_contains</code></td><td>Substring match on title</td></tr>
@@ -93,10 +105,11 @@
     <div class="card">
       <p>The same data, over the Model Context Protocol, for MCP-aware agent clients.</p>
       <table>
-        <tr><td>Endpoint</td><td><code>https://mcp.12getajob.com/mcp</code></td></tr>
-        <tr><td>Transport</td><td>Streamable HTTP</td></tr>
-        <tr><td>Auth</td><td>Same bearer token as the REST API</td></tr>
-        <tr><td>Tools</td><td><code>search_jobs</code> -- same filters as <code>GET /jobs</code> above</td></tr>
+        <caption class="sr-only">MCP server connection details</caption>
+        <tr><th scope="row">Endpoint</th><td><code>https://mcp.12getajob.com/mcp</code></td></tr>
+        <tr><th scope="row">Transport</th><td>Streamable HTTP</td></tr>
+        <tr><th scope="row">Auth</th><td>Same bearer token as the REST API</td></tr>
+        <tr><th scope="row">Tools</th><td><code>search_jobs</code> -- same filters as <code>GET /jobs</code> above</td></tr>
       </table>
       <p>Server card: <a href="/.well-known/mcp/server-card.json">/.well-known/mcp/server-card.json</a></p>
     </div>
@@ -112,6 +125,8 @@
       "here's the listing data" -- whatever you do with it (draft something, apply,
       ignore it) happens entirely on your end.
     </p>
+
+    </main>
 
     <footer>
       <a href="https://github.com/woskam/job-radar">job-radar</a> ·

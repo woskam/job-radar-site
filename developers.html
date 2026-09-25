@@ -4,13 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <title>12GetAJob for Developers</title>
   <meta name="description" content="Job Radar: a self-hosted, open-source job-search automation tool, and Job Radar Hub, a public read-only API of job listings for agents and other tools.">
+  <meta name="theme-color" content="#1e5a8a" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#6fb3e8" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://12getajob.com/developers">
+  <meta property="og:title" content="12GetAJob for Developers">
+  <meta property="og:description" content="Job Radar: a self-hosted, open-source job-search automation tool, and Job Radar Hub, a public read-only API of job listings for agents and other tools.">
   <link rel="canonical" href="https://12getajob.com/developers">
   <link rel="stylesheet" href="/assets/style.css">
   <script type="module" src="/assets/analytics.js"></script>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <div class="wrap">
     <header class="site-header">
       <a href="/">12GetAJob</a>
@@ -22,6 +32,7 @@
       </nav>
     </header>
 
+    <main id="main-content">
     <h1>For developers</h1>
     <p class="tagline">12GetAJob's job data comes from Job Radar, an open-source pipeline you can self-host, and Job Radar Hub, a public API/MCP server that serves it.</p>
 
@@ -71,13 +82,15 @@ Auth: Authorization: Bearer &lt;your_api_key&gt; (same keys as the REST API)</co
     <h2>For agents</h2>
     <p>This site is built to be readable by AI agents and other automated tools, not just browsers:</p>
     <table>
-      <tr><th>Resource</th><th>Purpose</th></tr>
+      <caption class="sr-only">Machine-readable resources this site publishes for agents</caption>
+      <tr><th scope="col">Resource</th><th scope="col">Purpose</th></tr>
       <tr><td><a href="/llms.txt">/llms.txt</a></td><td>Plain-Markdown site index</td></tr>
       <tr><td><a href="/openapi.json">/openapi.json</a></td><td>OpenAPI 3.0 spec for the Job Radar Hub API</td></tr>
       <tr><td><a href="/.well-known/api-catalog">/.well-known/api-catalog</a></td><td>Machine-readable resource catalog (RFC 9727)</td></tr>
       <tr><td><a href="/.well-known/mcp/server-card.json">/.well-known/mcp/server-card.json</a></td><td>MCP server card</td></tr>
       <tr><td><a href="/robots.txt">/robots.txt</a></td><td>Explicitly allows major AI crawlers</td></tr>
     </table>
+    </main>
 
     <footer>
       <a href="https://github.com/woskam/job-radar">job-radar</a> ·

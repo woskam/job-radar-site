@@ -4,13 +4,49 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <title>12GetAJob Companies</title>
   <meta name="description" content="Companies 12GetAJob tracks for job listings.">
+  <meta name="theme-color" content="#1e5a8a" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#6fb3e8" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://12getajob.com/companies">
+  <meta property="og:title" content="12GetAJob Companies">
+  <meta property="og:description" content="Companies 12GetAJob tracks for job listings.">
   <link rel="canonical" href="https://12getajob.com/companies">
   <link rel="stylesheet" href="/assets/style.css">
   <script type="module" src="/assets/analytics.js"></script>
+  <style>
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      padding: 0.5em 1em;
+      background: #fff;
+      color: #000;
+      z-index: 100;
+    }
+    .skip-link:focus {
+      left: 0.5em;
+      top: 0.5em;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <div class="wrap">
     <header class="site-header">
       <a href="/">12GetAJob</a>
@@ -22,18 +58,19 @@
       </nav>
     </header>
 
-    <h1>Companies</h1>
-    <p class="tagline"><span id="count">583</span> of 583 companies 12GetAJob tracks for job listings, from large employers to startups and scale-ups.</p>
+    <main id="main-content">
+      <h1>Companies</h1>
+      <p class="tagline"><span id="count">583</span> of 583 companies 12GetAJob tracks for job listings, from large employers to startups and scale-ups.</p>
 
-    <div class="filters">
-      <input type="search" id="q" placeholder="Search company or category&hellip;">
-      <select id="segment-filter">
-        <option value="">All segments</option>
-        <option value="startup">Startups &amp; scale-ups</option>
-        <option value="__established__">Established</option>
-      </select>
-      <select id="category-filter">
-        <option value="">All categories</option>
+      <div class="filters">
+        <input type="search" id="q" placeholder="Search company or category&hellip;" aria-label="Search company or category">
+        <select id="segment-filter" aria-label="Filter by segment">
+          <option value="">All segments</option>
+          <option value="startup">Startups &amp; scale-ups</option>
+          <option value="__established__">Established</option>
+        </select>
+        <select id="category-filter" aria-label="Filter by category">
+          <option value="">All categories</option>
         <option value="ai_ml">ai_ml</option>
         <option value="b2b">b2b</option>
         <option value="banking">banking</option>
@@ -67,11 +104,12 @@
         <option value="staffing">staffing</option>
         <option value="tech">tech</option>
         <option value="telecom">telecom</option>
-      </select>
-    </div>
+        </select>
+      </div>
 
-    <table id="companies-table">
-      <tr><th>Company</th><th>Category</th><th>Segment</th></tr>
+      <table id="companies-table">
+        <caption class="sr-only">Companies 12GetAJob tracks for job listings</caption>
+        <tr><th scope="col">Company</th><th scope="col">Category</th><th scope="col">Segment</th></tr>
       <tr data-name="9 mothers" data-category="industrials" data-segment="startup"><td><a href="https://9mothers.com/">9 Mothers</a></td><td>industrials</td><td>startup</td></tr>
       <tr data-name="abacum" data-category="b2b" data-segment="startup"><td><a href="https://www.abacum.ai/company/careers">Abacum</a></td><td>b2b</td><td>startup</td></tr>
       <tr data-name="abn amro" data-category="banking" data-segment=""><td><a href="https://www.werkenbijabnamro.nl/vacatures">ABN AMRO</a></td><td>banking</td><td></td></tr>
@@ -655,7 +693,8 @@
       <tr data-name="zeotap" data-category="saas" data-segment="startup"><td><a href="https://zeotap.recruitee.com">Zeotap</a></td><td>saas</td><td>startup</td></tr>
       <tr data-name="ziina" data-category="fintech" data-segment="startup"><td><a href="https://ziina.com/careers">Ziina</a></td><td>fintech</td><td>startup</td></tr>
       <tr data-name="zip" data-category="b2b" data-segment="startup"><td><a href="https://zip.com/careers">Zip</a></td><td>b2b</td><td>startup</td></tr>
-    </table>
+      </table>
+    </main>
 
     <footer>
       <a href="https://github.com/woskam/job-radar">job-radar</a> &middot;
