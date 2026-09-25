@@ -7,5 +7,5 @@
 //
 // GA_MEASUREMENT_ID: GA4 admin -> Data Streams -> your stream -> "Measurement ID" (G-XXXXXXXXXX)
 // GA_API_SECRET: GA4 admin -> Data Streams -> your stream -> Measurement Protocol API secrets -> Create
-export const GA_MEASUREMENT_ID = "G-PLACEHOLDER";
+export const GA_MEASUREMENT_ID = "G-7RZW9W8N1T";
 export const GA_API_SECRET = "PLACEHOLDER";
