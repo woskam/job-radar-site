@@ -50,7 +50,10 @@
               <input type="checkbox" id="remote-only"> Remote
             </label>
           </div>
+          <input type="text" id="exclude" placeholder="Exclude keywords (comma-separated)&hellip;" aria-label="Exclude keywords">
         </div>
+
+        <div id="location-chips" class="chip-list"></div>
       </div>
     </div>
 
@@ -79,11 +82,21 @@
 
   <script type="module">
     import { CATEGORIES } from '/assets/categories.js';
+    import { LOCATIONS } from '/assets/locations.js';
     const categorySelect = document.getElementById('category-filter');
     for (const c of CATEGORIES) {
       const opt = document.createElement('option');
       opt.value = c; opt.textContent = c;
       categorySelect.appendChild(opt);
+    }
+
+    const chipsEl = document.getElementById('location-chips');
+    for (const loc of LOCATIONS) {
+      const a = document.createElement('a');
+      a.className = 'chip-link';
+      a.href = `/jobs/${loc.slug}`;
+      a.textContent = loc.name;
+      chipsEl.appendChild(a);
     }
 
     const PAGE_SIZE = 20;
@@ -93,6 +106,7 @@
     const segmentFilter = document.getElementById('segment-filter');
     const locationInput = document.getElementById('location');
     const remoteOnly = document.getElementById('remote-only');
+    const excludeInput = document.getElementById('exclude');
     const resultsEl = document.getElementById('results');
     const countEl = document.getElementById('result-count');
     const pageIndicator = document.getElementById('page-indicator');
@@ -106,6 +120,7 @@
         category: categorySelect.value,
         segment: segmentFilter.value,
         location_contains: remoteOnly.checked ? 'remote' : locationInput.value.trim(),
+        exclude_keywords: excludeInput.value.trim(),
       };
     }
 
@@ -117,6 +132,7 @@
       if (f.segment) params.set('segment', f.segment);
       if (remoteOnly.checked) params.set('location_mode', 'remote');
       else if (f.location_contains) params.set('location_mode', f.location_contains);
+      if (f.exclude_keywords) params.set('exclude_keywords', f.exclude_keywords);
       alertLink.href = '/alerts' + (params.toString() ? '?' + params.toString() : '');
     }
 
@@ -172,6 +188,7 @@
     segmentFilter.addEventListener('change', searchFromStart);
     locationInput.addEventListener('input', searchFromStart);
     remoteOnly.addEventListener('change', searchFromStart);
+    excludeInput.addEventListener('input', searchFromStart);
     prevBtn.addEventListener('click', () => { offset = Math.max(0, offset - PAGE_SIZE); search(); });
     nextBtn.addEventListener('click', () => { offset += PAGE_SIZE; search(); });
 
@@ -182,6 +199,7 @@
     if (initial.get('segment')) segmentFilter.value = initial.get('segment');
     if (initial.get('location_mode') === 'remote') remoteOnly.checked = true;
     else if (initial.get('location_mode')) locationInput.value = initial.get('location_mode');
+    if (initial.get('exclude_keywords')) excludeInput.value = initial.get('exclude_keywords');
 
     search();
   </script>

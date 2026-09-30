@@ -105,6 +105,7 @@
     if (initial.get('segment')) document.getElementById('segment').value = initial.get('segment');
     if (initial.get('location_mode') === 'remote') document.getElementById('remote-only').checked = true;
     else if (initial.get('location_mode')) document.getElementById('location').value = initial.get('location_mode');
+    if (initial.get('exclude_keywords')) document.getElementById('exclude-keywords').value = initial.get('exclude_keywords');
 
     const form = document.getElementById('alerts-form');
     const message = document.getElementById('form-message');

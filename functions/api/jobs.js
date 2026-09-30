@@ -11,7 +11,7 @@ const HUB_URL = "https://hub.12getajob.com";
 // Only pass through params job-radar-hub's /jobs actually understands --
 // never forward the caller's query string verbatim, so this can't become
 // an arbitrary-param pass-through to the Hub.
-const ALLOWED_PARAMS = ["title_contains", "location_contains", "category", "segment", "company", "limit", "offset"];
+const ALLOWED_PARAMS = ["title_contains", "location_contains", "category", "segment", "exclude_keywords", "company", "limit", "offset"];
 
 export async function onRequestGet(context) {
   const { searchParams } = new URL(context.request.url);

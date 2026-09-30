@@ -51,6 +51,9 @@
           </div>
         </form>
         <p style="margin:0;"><a href="/alerts">Or skip straight to setting up an alert &rarr;</a></p>
+
+        <p class="tagline" style="margin:20px 0 4px;">Or browse by location:</p>
+        <div id="location-chips" class="chip-list"></div>
       </div>
     </div>
 
@@ -79,13 +82,23 @@
     </div>
   </main>
 
-  <script>
-    const CATEGORIES = ["ai_ml","b2b","banking","beauty","climate","consulting","consumer","crypto","devtools","ecommerce","education","enterprise","fashion","fintech","fmcg","government","healthcare","healthtech","industrials","insurance","marketplace","mobility","other","overheid","pharma","real_estate_and_construction","resilience","saas","semiconductor","sportswear","staffing","tech","telecom"];
+  <script type="module">
+    import { CATEGORIES } from '/assets/categories.js';
+    import { LOCATIONS } from '/assets/locations.js';
     const categorySelect = document.getElementById('category-filter');
     for (const c of CATEGORIES) {
       const opt = document.createElement('option');
       opt.value = c; opt.textContent = c;
       categorySelect.appendChild(opt);
+    }
+
+    const chipsEl = document.getElementById('location-chips');
+    for (const loc of LOCATIONS) {
+      const a = document.createElement('a');
+      a.className = 'chip-link';
+      a.href = `/jobs/${loc.slug}`;
+      a.textContent = loc.name;
+      chipsEl.appendChild(a);
     }
 
     document.getElementById('search-form').addEventListener('submit', (e) => {
