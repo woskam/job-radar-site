@@ -1,24 +1,30 @@
 :root {
   color-scheme: light dark;
-  --bg: #ffffff;
-  --text: #1a1a1a;
-  --muted: #5a5a5a;
-  --border: #e2e2e2;
+  --bg: #fbfbfc;
+  --surface: #ffffff;
+  --text: #12151a;
+  --muted: #5b6270;
+  --border: #e4e6eb;
   --accent: #1e5a8a;
-  --code-bg: #f4f4f4;
-  --hero-bg: #eef4fa;
-  --badge-bg: #eef4fa;
+  --accent-ink: #ffffff;
+  --code-bg: #f2f4f7;
+  --hero-bg: #eaf1f9;
+  --badge-bg: #eef2f7;
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 16px -4px rgba(15, 23, 42, 0.1);
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #14161a;
-    --text: #e8e8e8;
-    --muted: #9a9a9a;
-    --border: #2c2f36;
+    --bg: #0e1116;
+    --surface: #161a21;
+    --text: #eef1f5;
+    --muted: #99a2b1;
+    --border: #262b34;
     --accent: #6fb3e8;
-    --code-bg: #1d2025;
-    --hero-bg: #1a2530;
-    --badge-bg: #1e2b38;
+    --accent-ink: #0e1116;
+    --code-bg: #1a1f27;
+    --hero-bg: #172431;
+    --badge-bg: #1c222c;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -8px rgba(0, 0, 0, 0.6);
   }
 }
 
@@ -28,8 +34,9 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
 .wrap {
@@ -48,14 +55,15 @@ body {
 .hero {
   width: 100%;
   background: var(--hero-bg);
-  border-bottom: 3px solid var(--accent);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 0 var(--accent);
 }
 .hero-inner {
   max-width: 760px;
   margin: 0 auto;
   padding: 56px 20px 40px;
 }
-.hero h1 { font-size: 40px; max-width: 15ch; }
+.hero h1 { font-size: 42px; max-width: 15ch; text-wrap: balance; }
 .hero p.tagline { font-size: 18px; max-width: 46ch; }
 @media (max-width: 480px) {
   .hero h1 { font-size: 30px; }
@@ -70,14 +78,16 @@ header.site-header {
   gap: 8px;
 }
 
-header.site-header a { color: var(--text); text-decoration: none; font-weight: 700; font-size: 18px; }
+header.site-header a { color: var(--text); text-decoration: none; font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
 header.site-header nav a {
   display: inline-block;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 14px;
   color: var(--muted);
   margin-left: 18px;
   padding: 6px 0;
+  text-decoration: none;
+  transition: color 0.15s;
 }
 header.site-header nav a:hover { color: var(--accent); }
 
@@ -108,12 +118,16 @@ header.site-header nav a:hover { color: var(--accent); }
   border: 0;
 }
 
-h1 { font-size: 32px; letter-spacing: -0.02em; margin-bottom: 4px; }
-h2 { font-size: 20px; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 28px; }
-h3 { font-size: 16px; margin-top: 24px; }
+h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 4px; text-wrap: balance; }
+h2 { font-size: 21px; font-weight: 700; margin-top: 44px; border-top: 1px solid var(--border); padding-top: 28px; letter-spacing: -0.01em; }
+h3 { font-size: 16px; font-weight: 700; margin-top: 24px; }
 p.tagline { color: var(--muted); font-size: 17px; margin-top: 0; }
 
 a { color: var(--accent); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 
 code, pre {
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -125,12 +139,43 @@ pre { padding: 16px; overflow-x: auto; font-size: 13.5px; }
 pre code { padding: 0; background: none; }
 
 .card {
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
   padding: 18px 20px;
   margin: 14px 0;
 }
 .card h3 { margin-top: 0; }
+
+/* Numbered step cards -- index.html's "How it works" -- a real number
+   badge instead of "1. " prefixed into the heading text. */
+.step-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 20px 22px;
+  margin: 14px 0;
+}
+.step-number {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 800;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step-card h3 { margin: 2px 0 4px; }
+.step-card p { margin: 0; color: var(--muted); }
 
 .filters {
   display: flex;
@@ -142,30 +187,35 @@ pre code { padding: 0; background: none; }
   font: inherit;
   font-size: 14px;
   color: var(--text);
-  background: var(--bg);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 7px 10px;
+  border-radius: 8px;
+  padding: 8px 12px;
 }
 .filters input { flex: 1 1 200px; }
 
 button {
   font: inherit;
   font-size: 14px;
-  font-weight: 600;
-  color: #fff;
+  font-weight: 700;
+  color: var(--accent-ink);
   background: var(--accent);
   border: none;
-  border-radius: 6px;
-  padding: 9px 16px;
+  border-radius: 8px;
+  padding: 10px 18px;
   cursor: pointer;
   align-self: flex-start;
+  box-shadow: var(--shadow);
+  transition: transform 0.1s, opacity 0.15s;
 }
-button:hover { opacity: 0.9; }
+button:hover { opacity: 0.92; transform: translateY(-1px); }
+button:active { transform: translateY(0); }
 
 .job-card {
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
   padding: 16px 18px;
   margin: 12px 0;
 }
@@ -176,6 +226,7 @@ button:hover { opacity: 0.9; }
 .badge {
   display: inline-block;
   font-size: 12px;
+  font-weight: 600;
   color: var(--muted);
   background: var(--badge-bg);
   border-radius: 999px;
@@ -191,6 +242,7 @@ button:hover { opacity: 0.9; }
 .chip-link {
   display: inline-block;
   font-size: 13.5px;
+  font-weight: 600;
   color: var(--text);
   background: var(--badge-bg);
   border-radius: 999px;
@@ -200,7 +252,7 @@ button:hover { opacity: 0.9; }
 }
 .chip-link:hover, .chip-link:focus-visible {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-ink);
 }
 
 .pagination {
@@ -210,11 +262,11 @@ button:hover { opacity: 0.9; }
   margin: 24px 0;
   font-size: 14px;
 }
-.pagination button:disabled { opacity: 0.4; cursor: default; }
+.pagination button:disabled { opacity: 0.4; cursor: default; transform: none; }
 
 .muted-section {
   background: var(--code-bg);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 20px 22px;
   margin: 20px 0;
 }
@@ -222,7 +274,7 @@ button:hover { opacity: 0.9; }
 
 table { border-collapse: collapse; width: 100%; font-size: 14px; }
 th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
-th { color: var(--muted); font-weight: 600; }
+th { color: var(--muted); font-weight: 700; }
 
 .agent-note {
   font-size: 13.5px;
@@ -232,60 +284,63 @@ th { color: var(--muted); font-weight: 600; }
   margin: 16px 0;
 }
 
+/* Site footer -- primary nav (Product/Developers/Legal) first, the much
+   longer Locations list clearly secondary (smaller, denser, its own
+   divider) so it fills the footer out for SEO without dominating it
+   visually, then a bottom bar. */
 .site-footer {
-  margin-top: 56px;
-  padding-top: 32px;
+  margin-top: 64px;
+  padding-top: 40px;
   border-top: 1px solid var(--border);
   color: var(--muted);
   font-size: 13.5px;
 }
-.site-footer-locations {
-  margin-bottom: 24px;
-}
-.site-footer-locations h4 {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text);
-  margin: 0 0 10px;
-}
-.site-footer-locations-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-}
-.site-footer-locations-list a { color: var(--muted); text-decoration: none; font-size: 13px; }
-.site-footer-locations-list a:hover { color: var(--accent); text-decoration: underline; }
 .site-footer-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 28px;
+  gap: 32px;
+  margin-bottom: 8px;
 }
 .site-footer-grid > div {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
-.site-footer-grid h4 {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+.site-footer-grid h4, .site-footer-locations h4 {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text);
-  margin: 0 0 4px;
+  margin: 0 0 2px;
 }
 .site-footer-grid a { color: var(--muted); text-decoration: none; }
-.site-footer-grid a:hover { color: var(--accent); text-decoration: underline; }
+.site-footer-grid a:hover { color: var(--accent); }
+.site-footer-locations {
+  padding-top: 28px;
+  margin-top: 28px;
+  border-top: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+.site-footer-locations-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 12.5px;
+  line-height: 2;
+}
+.site-footer-locations-list a { color: var(--muted); text-decoration: none; }
+.site-footer-locations-list a:hover { color: var(--accent); text-decoration: underline; }
 .site-footer-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  padding-top: 16px;
+  margin-top: 28px;
+  padding-top: 20px;
   border-top: 1px solid var(--border);
+  font-size: 12.5px;
 }
 .site-footer-bottom a { color: var(--muted); }
 @media (max-width: 480px) {
