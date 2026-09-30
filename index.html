@@ -42,7 +42,7 @@
             <input type="search" id="q" placeholder="Job title or keyword&hellip;" aria-label="Job title or keyword">
             <select id="category-filter" aria-label="Category"><option value="">Any category</option></select>
             <div style="display:flex; gap:8px; flex:1 1 220px;">
-              <input type="text" id="location" placeholder="Location" aria-label="Location">
+              <select id="location" aria-label="Location"><option value="">Any location</option></select>
               <label style="display:flex; align-items:center; gap:6px; font-size:14px; white-space:nowrap;">
                 <input type="checkbox" id="remote-only"> Remote
               </label>
@@ -90,6 +90,14 @@
       const opt = document.createElement('option');
       opt.value = c; opt.textContent = c;
       categorySelect.appendChild(opt);
+    }
+
+    const locationSelect = document.getElementById('location');
+    for (const loc of LOCATIONS) {
+      if (loc.slug === 'remote') continue; // covered by the separate Remote checkbox
+      const opt = document.createElement('option');
+      opt.value = loc.name.toLowerCase(); opt.textContent = loc.name;
+      locationSelect.appendChild(opt);
     }
 
     const chipsEl = document.getElementById('location-chips');

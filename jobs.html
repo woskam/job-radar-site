@@ -45,7 +45,7 @@
             <option value="startup">Startups &amp; scale-ups</option>
           </select>
           <div style="display:flex; gap:8px; flex:1 1 220px;">
-            <input type="text" id="location" placeholder="Location" aria-label="Location">
+            <select id="location" aria-label="Location"><option value="">Any location</option></select>
             <label style="display:flex; align-items:center; gap:6px; font-size:14px; white-space:nowrap;">
               <input type="checkbox" id="remote-only"> Remote
             </label>
@@ -53,6 +53,7 @@
           <input type="text" id="exclude" placeholder="Exclude keywords (comma-separated)&hellip;" aria-label="Exclude keywords">
         </div>
 
+        <p class="tagline" style="margin:16px 0 4px;">Or browse by location:</p>
         <div id="location-chips" class="chip-list"></div>
       </div>
     </div>
@@ -88,6 +89,14 @@
       const opt = document.createElement('option');
       opt.value = c; opt.textContent = c;
       categorySelect.appendChild(opt);
+    }
+
+    const locationSelect = document.getElementById('location');
+    for (const loc of LOCATIONS) {
+      if (loc.slug === 'remote') continue; // covered by the separate Remote checkbox
+      const opt = document.createElement('option');
+      opt.value = loc.name.toLowerCase(); opt.textContent = loc.name;
+      locationSelect.appendChild(opt);
     }
 
     const chipsEl = document.getElementById('location-chips');
@@ -186,7 +195,7 @@
     q.addEventListener('input', searchFromStart);
     categorySelect.addEventListener('change', searchFromStart);
     segmentFilter.addEventListener('change', searchFromStart);
-    locationInput.addEventListener('input', searchFromStart);
+    locationInput.addEventListener('change', searchFromStart);
     remoteOnly.addEventListener('change', searchFromStart);
     excludeInput.addEventListener('input', searchFromStart);
     prevBtn.addEventListener('click', () => { offset = Math.max(0, offset - PAGE_SIZE); search(); });
