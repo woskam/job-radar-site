@@ -8,8 +8,8 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <title>12GetAJob</title>
   <meta name="description" content="Search live job listings and get a daily email when new ones match your saved search.">
-  <meta name="theme-color" content="#1e5a8a" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#6fb3e8" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#0e0e12" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b0b0d" media="(prefers-color-scheme: dark)">
   <meta name="color-scheme" content="light dark">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://12getajob.com/">
@@ -18,8 +18,8 @@
   <link rel="canonical" href="https://12getajob.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css?v=4">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css?v=5">
   <script type="module" src="/assets/analytics.js"></script>
 </head>
 <body>
@@ -34,45 +34,85 @@
             <a href="/companies">Companies</a>
             <a href="/alerts">Alerts</a>
             <a href="/developers">For developers</a>
+            <a href="/alerts" class="pill-btn pill-btn-dark">Get alerts</a>
           </nav>
         </header>
 
-        <h1>Find your next job. Get emailed when new ones match.</h1>
-        <p class="tagline">Search live listings from Workday, Greenhouse, and hundreds of YC/VC-backed startups -- then save the search as a daily email alert.</p>
-
-        <div class="stats-strip">
-          <div class="stat-tile"><span class="n" id="stat-companies">&hellip;</span><span class="l">companies</span></div>
-          <div class="stat-tile"><span class="n" id="stat-jobs">&hellip;</span><span class="l">open jobs</span></div>
-          <div class="stat-tile"><span class="n">100+</span><span class="l">cities</span></div>
-          <div class="stat-tile"><span class="n">50+</span><span class="l">countries</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 24px;">
+          <span class="hero-badge">Live listings, refreshed continuously</span>
+          <h1 style="max-width: 18ch;">Find your next job. Get emailed when new ones match.</h1>
+          <p class="tagline" style="margin: 12px 0 0; max-width: 44ch;">Search live listings from Workday, Greenhouse, and hundreds of YC/VC-backed startups -- then save the search as a daily email alert.</p>
         </div>
 
-        <form id="search-form">
-          <div class="filters">
-            <input type="search" id="q" placeholder="Job title or keyword&hellip;" aria-label="Job title or keyword">
-            <select id="category-filter" aria-label="Category"><option value="">Any category</option></select>
-            <div style="display:flex; gap:8px; flex:1 1 220px;">
-              <select id="location" aria-label="Location"><option value="">Any location</option></select>
-              <label style="display:flex; align-items:center; gap:6px; font-size:14px; white-space:nowrap;">
-                <input type="checkbox" id="remote-only"> Remote
-              </label>
-            </div>
-            <button type="submit">Search jobs</button>
+        <div class="browser-card" style="max-width: 680px; margin-left: auto; margin-right: auto;">
+          <div class="browser-card-bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="url">12getajob.com/jobs</span>
           </div>
-        </form>
-        <p style="margin:0;"><a href="/alerts">Or skip straight to setting up an alert &rarr;</a></p>
+          <div class="browser-card-body">
+            <form id="search-form">
+              <div class="filters">
+                <input type="search" id="q" placeholder="Job title or keyword&hellip;" aria-label="Job title or keyword">
+                <select id="category-filter" aria-label="Category"><option value="">Any category</option></select>
+                <div style="display:flex; gap:8px; flex:1 1 220px;">
+                  <select id="location" aria-label="Location"><option value="">Any location</option></select>
+                  <label style="display:flex; align-items:center; gap:6px; font-size:14px; white-space:nowrap;">
+                    <input type="checkbox" id="remote-only"> Remote
+                  </label>
+                </div>
+                <button type="submit">Search jobs</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <p style="margin: 0 0 8px; text-align: center;"><a href="/alerts">Or skip straight to setting up an alert &rarr;</a></p>
+      </div>
+    </div>
 
-        <p class="tagline" style="margin:20px 0 4px;">Or browse by location:</p>
-        <div id="location-chips" class="chip-list"></div>
+    <div class="sources-row">
+      <span class="label">Live data from every major ATS</span>
+      <div class="logos">
+        <span>Workday</span>
+        <span>Greenhouse</span>
+        <span>Ashby</span>
+        <span>Lever</span>
+        <span>Personio</span>
+        <span>Teamtailor</span>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div><span class="n" id="stat-companies">&hellip;</span><span class="l">companies</span></div>
+      <div><span class="n" id="stat-jobs">&hellip;</span><span class="l">open jobs</span></div>
+      <div><span class="n">100+</span><span class="l">cities</span></div>
+      <div><span class="n">50+</span><span class="l">countries</span></div>
+    </div>
+
+    <div class="feature-block">
+      <div class="copy">
+        <h2>Search or browse</h2>
+        <p>Filter by keyword, category, segment, and location across every listing 12GetAJob tracks -- or just browse by city.</p>
+      </div>
+      <div class="visual">
+        <div id="location-chips" class="chip-list" style="margin: 0;"></div>
+      </div>
+    </div>
+
+    <div class="feature-block reverse">
+      <div class="copy">
+        <h2>Save it as an alert</h2>
+        <p>One click carries your filters over -- add an email, confirm, done. Only new matches since the last one, unsubscribe any time.</p>
+      </div>
+      <div class="visual">
+        <div style="background: var(--surface); border-radius: 14px; padding: 20px 22px; box-shadow: var(--shadow); width: 100%;">
+          <div style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Daily alert &middot; example</div>
+          <div style="font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 15px; margin-bottom: 10px;">3 new matches for &ldquo;backend engineer, Amsterdam&rdquo;</div>
+          <div style="font-size: 13.5px; color: var(--muted); line-height: 1.8;">Senior Backend Engineer -- Adyen<br>Platform Engineer -- Mollie<br>Backend Developer -- Bunq</div>
+        </div>
       </div>
     </div>
 
     <div class="wrap">
-      <h2 style="border-top:none; margin-top:0; padding-top:0;">How it works</h2>
-      <div class="step-card"><div class="step-number">1</div><div><h3>Search or browse</h3><p>Filter by keyword, category, segment, and location across every listing 12GetAJob tracks.</p></div></div>
-      <div class="step-card"><div class="step-number">2</div><div><h3>Save it as an alert</h3><p>One click carries your filters over -- add an email, confirm, done.</p></div></div>
-      <div class="step-card"><div class="step-number">3</div><div><h3>Get a daily email</h3><p>Only new matches since the last one. Unsubscribe any time, one click, no login.</p></div></div>
-
       <div class="muted-section">
         <h2>Open source underneath</h2>
         <p>
@@ -80,9 +120,16 @@
           self-hosted job-search pipeline, and <a href="https://github.com/woskam/job-radar-hub">Job Radar Hub</a>,
           its public API and MCP server. Both are open source, and you can self-host the whole thing yourself.
         </p>
-        <p><a href="/developers">For developers &rarr;</a></p>
+        <p style="margin-bottom: 0;"><a href="/developers">For developers &rarr;</a></p>
       </div>
+    </div>
 
+    <div class="cta-section">
+      <h2>Start finding your next job</h2>
+      <a href="/jobs" class="pill-btn pill-btn-dark">Search jobs</a>
+    </div>
+
+    <div class="wrap">
       <footer class="site-footer" role="contentinfo">
         <div class="site-footer-grid">
           <div>

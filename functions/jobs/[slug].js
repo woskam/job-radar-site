@@ -90,8 +90,8 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug }) {
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <title>${escapeHtml(title)}</title>
   <meta name="description" content="${escapeHtml(description)}">
-  <meta name="theme-color" content="#1e5a8a" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#6fb3e8" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#0e0e12" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b0b0d" media="(prefers-color-scheme: dark)">
   <meta name="color-scheme" content="light dark">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${canonical}">
@@ -100,8 +100,8 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug }) {
   <link rel="canonical" href="${canonical}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css?v=4">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css?v=5">
   <script type="module" src="/assets/analytics.js"></script>
 </head>
 <body>
