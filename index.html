@@ -111,11 +111,21 @@
 
     document.getElementById('search-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      const params = new URLSearchParams();
       const q = document.getElementById('q').value.trim();
       const category = categorySelect.value;
       const remoteOnly = document.getElementById('remote-only').checked;
-      const location = document.getElementById('location').value.trim();
+      const location = document.getElementById('location').value;
+
+      // Location/remote or category alone, with no keyword, is exactly
+      // what a /jobs/{slug} landing page represents -- go straight there,
+      // same URL a chip click produces, instead of /jobs?location_mode=...
+      if (!q) {
+        const loc = remoteOnly ? 'remote' : (location ? (LOCATIONS.find((l) => l.name.toLowerCase() === location) || {}).slug : null);
+        if (loc && !category) { window.location.href = `/jobs/${loc}`; return; }
+        if (category && !loc) { window.location.href = `/jobs/${category}`; return; }
+      }
+
+      const params = new URLSearchParams();
       if (q) params.set('keywords', q);
       if (category) params.set('category', category);
       if (remoteOnly) params.set('location_mode', 'remote');

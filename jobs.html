@@ -123,6 +123,30 @@
     const nextBtn = document.getElementById('next-page');
     const alertLink = document.getElementById('alert-link');
 
+    // If location/remote or category is the *only* active filter, that's
+    // exactly what a /jobs/{slug} landing page already represents -- so
+    // navigate there instead of live-filtering in place, same URL a chip
+    // click produces. Anything combined with a keyword/segment/exclude,
+    // or location+category together, has no single landing page for it
+    // and stays on the live /jobs search.
+    function landingPageSlug() {
+      if (q.value.trim() || segmentFilter.value || excludeInput.value.trim()) return null;
+      const loc = remoteOnly.checked
+        ? 'remote'
+        : locationInput.value
+          ? (LOCATIONS.find((l) => l.name.toLowerCase() === locationInput.value) || {}).slug
+          : null;
+      const cat = categorySelect.value || null;
+      if (loc && cat) return null;
+      return loc || cat || null;
+    }
+
+    function maybeNavigateToLandingPage() {
+      const slug = landingPageSlug();
+      if (slug) window.location.href = `/jobs/${slug}`;
+      return !!slug;
+    }
+
     function currentFilters() {
       return {
         title_contains: q.value.trim(),
@@ -193,10 +217,10 @@
     }
 
     q.addEventListener('input', searchFromStart);
-    categorySelect.addEventListener('change', searchFromStart);
+    categorySelect.addEventListener('change', () => { if (!maybeNavigateToLandingPage()) searchFromStart(); });
     segmentFilter.addEventListener('change', searchFromStart);
-    locationInput.addEventListener('change', searchFromStart);
-    remoteOnly.addEventListener('change', searchFromStart);
+    locationInput.addEventListener('change', () => { if (!maybeNavigateToLandingPage()) searchFromStart(); });
+    remoteOnly.addEventListener('change', () => { if (!maybeNavigateToLandingPage()) searchFromStart(); });
     excludeInput.addEventListener('input', searchFromStart);
     prevBtn.addEventListener('click', () => { offset = Math.max(0, offset - PAGE_SIZE); search(); });
     nextBtn.addEventListener('click', () => { offset += PAGE_SIZE; search(); });
