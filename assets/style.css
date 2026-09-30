@@ -190,20 +190,22 @@ body {
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  /* Promotes this box to its own compositing layer -- without it, iOS
-     Safari has been seen to leave the gradient background painted for an
-     earlier, shorter version of the chip-list inside (#location-chips),
-     missing the row(s) added by a later reflow (e.g. once the Google
-     Fonts swap finishes and chip widths change). Forcing a layer makes
-     Safari recomposite the background against the final content size
-     instead of reusing a stale bitmap. */
-  transform: translateZ(0);
 }
 @media (prefers-color-scheme: dark) {
   .feature-block .visual { background: linear-gradient(135deg, #1c2233 0%, #241f30 100%); }
 }
 @media (max-width: 620px) {
-  .feature-block, .feature-block.reverse { flex-direction: column; }
+  /* .feature-block's own align-items: center (set for the desktop row
+     layout, to vertically center .copy against .visual) carries over
+     into this column layout as cross-axis alignment -- meaning .visual
+     shrink-wraps to its content's width instead of filling the column,
+     leaving its flex-wrap child (#location-chips) to size itself against
+     that ambiguous, not-yet-settled width. Safari has been seen to get
+     this wrong: the chip list wraps against one width while the
+     background box paints to a different (usually narrower) one, so the
+     two disagree at the edges -- explicit stretch removes the ambiguity
+     entirely by giving .visual the column's real, fixed width up front. */
+  .feature-block, .feature-block.reverse { flex-direction: column; align-items: stretch; }
 }
 
 .cta-section {
