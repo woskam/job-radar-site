@@ -228,13 +228,22 @@
     }
 
     const chipsEl = document.getElementById('location-chips');
+    const chipsFragment = document.createDocumentFragment();
     for (const loc of LOCATIONS) {
       const a = document.createElement('a');
       a.className = 'chip-link';
       a.href = `/jobs/${loc.slug}`;
       a.textContent = loc.name;
-      chipsEl.appendChild(a);
+      chipsFragment.appendChild(a);
     }
+    // One insertion for all ~30 chips instead of 30 separate appendChild
+    // calls -- iOS Safari has been seen to mis-paint a flex-wrap container's
+    // gradient background when its content grows via many back-to-back DOM
+    // insertions (the background renders for however many rows existed at
+    // an earlier, smaller paint, leaving later rows uncovered until the
+    // next repaint). Appending a fully-built fragment in one shot avoids
+    // ever leaving the container in that intermediate state.
+    chipsEl.appendChild(chipsFragment);
 
     document.getElementById('search-form').addEventListener('submit', (e) => {
       e.preventDefault();
