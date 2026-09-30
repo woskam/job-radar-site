@@ -359,7 +359,7 @@ button:active { transform: translateY(0); }
   padding: 16px 18px;
   margin: 12px 0;
 }
-.job-card h3 { margin: 0 0 4px; font-size: 16.5px; font-family: "Work Sans", sans-serif; }
+.job-card h2 { margin: 0 0 4px; font-size: 16.5px; font-weight: 600; font-family: "Work Sans", sans-serif; }
 .job-card .meta { color: var(--muted); font-size: 14px; margin-bottom: 8px; }
 .job-card .badges { display: flex; gap: 6px; flex-wrap: wrap; }
 
@@ -448,7 +448,11 @@ th { color: var(--muted); font-weight: 700; }
   flex-direction: column;
   gap: 10px;
 }
-.site-footer-grid h4, .site-footer-locations h4 {
+/* Class-based, not h4-based -- the actual heading level varies per page
+   (must follow whatever level the page's own content last used, per
+   specification.website's heading-hierarchy rule), so styling can't be
+   keyed to a specific tag. */
+.site-footer-heading {
   font-family: "Outfit", sans-serif;
   font-size: 11.5px;
   font-weight: 600;
@@ -488,4 +492,15 @@ th { color: var(--muted); font-weight: 700; }
 .site-footer-bottom a { color: var(--muted); text-decoration: none; }
 @media (max-width: 480px) {
   .site-footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* specification.website's reduced-motion rule -- the site's only motion is
+   short hover/focus transitions (opacity, transform, color, background),
+   but honoring the setting is nearly free and some visitors do have it on. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

@@ -105,7 +105,7 @@ function renderResults(data) {
     const badges = [job.category, job.segment].filter(Boolean)
       .map((b) => `<span class="badge">${b}</span>`).join('');
     card.innerHTML = `
-      <h3><a href="${job.url}" target="_blank" rel="noopener">${job.title || '(untitled)'}</a></h3>
+      <h2><a href="${job.url}" target="_blank" rel="noopener">${job.title || '(untitled)'}</a></h2>
       <div class="meta">${job.company || ''}${job.location ? ' &middot; ' + job.location : ''}</div>
       <div class="badges">${badges}</div>
     `;

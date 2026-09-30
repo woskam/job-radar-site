@@ -74,7 +74,7 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug }) {
       .map((b) => `<span class="badge">${escapeHtml(b)}</span>`).join("");
     return `
         <div class="job-card">
-          <h3><a href="${escapeHtml(job.url)}" target="_blank" rel="noopener">${escapeHtml(job.title || "(untitled)")}</a></h3>
+          <h2><a href="${escapeHtml(job.url)}" target="_blank" rel="noopener">${escapeHtml(job.title || "(untitled)")}</a></h2>
           <div class="meta">${escapeHtml(job.company || "")}${job.location ? " &middot; " + escapeHtml(job.location) : ""}</div>
           <div class="badges">${badges}</div>
         </div>`;
@@ -101,7 +101,7 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug }) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css?v=5">
+  <link rel="stylesheet" href="/assets/style.css?v=6">
   <script type="module" src="/assets/analytics.js"></script>
 </head>
 <body>
@@ -161,25 +161,25 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug }) {
       <footer class="site-footer" role="contentinfo">
         <div class="site-footer-grid">
           <div>
-            <h4>Product</h4>
+            <h3 class="site-footer-heading">Product</h3>
             <a href="/jobs">Jobs</a>
             <a href="/companies">Companies</a>
             <a href="/alerts">Alerts</a>
           </div>
           <div>
-            <h4>Developers</h4>
+            <h3 class="site-footer-heading">Developers</h3>
             <a href="/developers">For developers</a>
             <a href="/api">API docs</a>
             <a href="https://github.com/woskam/job-radar">job-radar</a>
             <a href="https://github.com/woskam/job-radar-hub">job-radar-hub</a>
           </div>
           <div>
-            <h4>Legal</h4>
+            <h3 class="site-footer-heading">Legal</h3>
             <a href="/privacy">Privacy</a>
           </div>
         </div>
         <div class="site-footer-locations">
-          <h4>Locations</h4>
+          <h3 class="site-footer-heading">Locations</h3>
           <div class="site-footer-locations-list">
             <a href="/jobs/remote">Remote</a>
             <a href="/jobs/san-francisco">San Francisco</a>
