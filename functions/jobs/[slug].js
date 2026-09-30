@@ -98,7 +98,7 @@ function renderPage({ slug, resolved, jobs, siteOrigin }) {
   <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${escapeHtml(description)}">
   <link rel="canonical" href="${canonical}">
-  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/assets/style.css?v=2">
   <script type="module" src="/assets/analytics.js"></script>
 </head>
 <body>
