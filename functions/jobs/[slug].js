@@ -32,15 +32,16 @@ function resolveSlug(slug) {
   if (normalized === "remote") {
     return { kind: "remote", locationMode: "remote", label: "Remote" };
   }
+  // Title Case for display (categories and locations alike) -- the Hub's
+  // own LIKE-based location_contains handles matching against the many
+  // real-world location spellings ("Berlin", "Berlin, Germany", ...).
+  const titleCase = (s) => s.replace(/\b\w/g, (c) => c.toUpperCase());
+
   const category = CATEGORIES.find((c) => c.toLowerCase() === normalized);
   if (category) {
-    return { kind: "category", category, label: category.replace(/_/g, " ") };
+    return { kind: "category", category, label: titleCase(category.replace(/_/g, " ")) };
   }
-  // Anything else is treated as a location -- Title Case for display,
-  // the Hub's own LIKE-based location_contains handles matching against
-  // the many real-world spellings ("Berlin", "Berlin, Germany", ...).
-  const label = spaced.replace(/\b\w/g, (c) => c.toUpperCase());
-  return { kind: "location", locationMode: spaced, label };
+  return { kind: "location", locationMode: spaced, label: titleCase(spaced) };
 }
 
 function renderPage({ slug, resolved, jobs, siteOrigin }) {
