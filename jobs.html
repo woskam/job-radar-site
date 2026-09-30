@@ -77,8 +77,8 @@
     </div>
   </main>
 
-  <script>
-    const CATEGORIES = ["ai_ml","b2b","banking","beauty","climate","consulting","consumer","crypto","devtools","ecommerce","education","enterprise","fashion","fintech","fmcg","government","healthcare","healthtech","industrials","insurance","marketplace","mobility","other","overheid","pharma","real_estate_and_construction","resilience","saas","semiconductor","sportswear","staffing","tech","telecom"];
+  <script type="module">
+    import { CATEGORIES } from '/assets/categories.js';
     const categorySelect = document.getElementById('category-filter');
     for (const c of CATEGORIES) {
       const opt = document.createElement('option');
