@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css?v=3">
+  <link rel="stylesheet" href="/assets/style.css?v=4">
   <script type="module" src="/assets/analytics.js"></script>
 </head>
 <body>
@@ -39,6 +39,13 @@
 
         <h1>Find your next job. Get emailed when new ones match.</h1>
         <p class="tagline">Search live listings from Workday, Greenhouse, and hundreds of YC/VC-backed startups -- then save the search as a daily email alert.</p>
+
+        <div class="stats-strip">
+          <div class="stat-tile"><span class="n" id="stat-companies">&hellip;</span><span class="l">companies</span></div>
+          <div class="stat-tile"><span class="n" id="stat-jobs">&hellip;</span><span class="l">open jobs</span></div>
+          <div class="stat-tile"><span class="n">29</span><span class="l">cities</span></div>
+          <div class="stat-tile"><span class="n">50+</span><span class="l">countries</span></div>
+        </div>
 
         <form id="search-form">
           <div class="filters">
@@ -142,6 +149,22 @@
   <script type="module">
     import { CATEGORIES } from '/assets/categories.js';
     import { LOCATIONS } from '/assets/locations.js';
+
+    // Real aggregate counts from the Hub (COUNT(*), not the len(results)
+    // capped-at-limit figure GET /jobs returns) -- fetched directly
+    // cross-origin, same public+CORS-enabled pattern as /alerts/subscribe,
+    // no Function proxy needed since nothing secret is involved.
+    fetch('https://hub.12getajob.com/stats')
+      .then((r) => r.json())
+      .then((data) => {
+        document.getElementById('stat-companies').textContent = data.companies.toLocaleString('en-US');
+        document.getElementById('stat-jobs').textContent = data.jobs.toLocaleString('en-US');
+      })
+      .catch(() => {
+        document.getElementById('stat-companies').textContent = '1,000+';
+        document.getElementById('stat-jobs').textContent = '30,000+';
+      });
+
     const categorySelect = document.getElementById('category-filter');
     for (const c of CATEGORIES) {
       const opt = document.createElement('option');
