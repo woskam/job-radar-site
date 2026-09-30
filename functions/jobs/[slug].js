@@ -3,8 +3,19 @@
 // not a periodically-regenerated static file like companies.html. That
 // matters for crawlers: whoever fetches /jobs/amsterdam gets real,
 // current job listings in the raw HTML, not an empty shell waiting for
-// client-side JS. See ../../jobs.html for the equivalent client-rendered
-// interactive search this links out to for "see more".
+// client-side JS.
+//
+// The rendered page is the *same* interactive search as jobs.html (same
+// filter bar, chips, pagination, alert link -- all driven by the shared
+// assets/jobs-search.js) rather than a dead-end card list: this Function
+// only supplies two things jobs.html doesn't need -- real job cards
+// already in the initial HTML (server-side fetched, for crawlers and for
+// a non-blank first paint) and window.__INITIAL_FILTERS__, telling the
+// shared script which filter this slug represents so it starts already
+// applied instead of empty. From there the page behaves identically to
+// /jobs: the shared script's own fetch quickly replaces these server-
+// rendered cards with its own (a brief flash of the same data, standard
+// SSR+hydrate trade-off, not worth avoiding with more machinery here).
 //
 // No schema.org/JobPosting structured data yet, and job cards still link
 // to the original ATS posting (job.url) rather than a URL of our own --
@@ -12,12 +23,7 @@
 import { CATEGORIES } from "../../assets/categories.js";
 
 const HUB_URL = "https://hub.12getajob.com";
-// The Hub's /jobs "count" field is just len(results) for this page, not a
-// true total match count (see job-radar-hub/app.py's jobs() view) -- so
-// the only honest way to say "how many" is to request its actual max
-// page size and treat hitting that cap as a lower bound ("200+"), rather
-// than trust a smaller page's count as if it were the full total.
-const PAGE_SIZE = 200;
+const PAGE_SIZE = 50; // matches assets/jobs-search.js's own PAGE_SIZE
 
 function escapeHtml(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({
@@ -44,26 +50,24 @@ function resolveSlug(slug) {
   return { kind: "location", locationMode: spaced, label: titleCase(spaced) };
 }
 
-function renderPage({ slug, resolved, jobs, siteOrigin }) {
-  const atCap = jobs.length === PAGE_SIZE;
-  const countLabel = atCap ? `${PAGE_SIZE}+` : String(jobs.length);
+function initialFiltersFor(resolved) {
+  if (resolved.kind === "remote") return { location_mode: "remote" };
+  if (resolved.kind === "category") return { category: resolved.category };
+  return { location_mode: resolved.locationMode };
+}
+
+function renderPage({ resolved, jobs, count, siteOrigin, slug }) {
   const title = resolved.kind === "remote"
     ? "Remote jobs | 12GetAJob"
     : resolved.kind === "category"
       ? `${resolved.label} jobs | 12GetAJob`
       : `Jobs in ${resolved.label} | 12GetAJob`;
   const description = resolved.kind === "remote"
-    ? "Live remote job listings, updated continuously -- save this search as a daily email alert."
+    ? "Live remote job listings, updated continuously -- search, filter, and save it as a daily email alert."
     : resolved.kind === "category"
-      ? `Live ${resolved.label} job listings, updated continuously -- save this search as a daily email alert.`
-      : `Live job listings in ${resolved.label}, updated continuously -- save this search as a daily email alert.`;
+      ? `Live ${resolved.label} job listings, updated continuously -- search, filter, and save it as a daily email alert.`
+      : `Live job listings in ${resolved.label}, updated continuously -- search, filter, and save it as a daily email alert.`;
   const canonical = `${siteOrigin}/jobs/${slug}`;
-
-  const searchParams = new URLSearchParams();
-  if (resolved.kind === "remote") searchParams.set("location_mode", "remote");
-  else if (resolved.kind === "category") searchParams.set("category", resolved.category);
-  else searchParams.set("location_mode", resolved.locationMode);
-  const searchUrl = `/jobs?${searchParams.toString()}`;
 
   const cards = jobs.map((job) => {
     const badges = [job.category, job.segment].filter(Boolean)
@@ -75,10 +79,6 @@ function renderPage({ slug, resolved, jobs, siteOrigin }) {
           <div class="badges">${badges}</div>
         </div>`;
   }).join("\n");
-
-  const seeMore = atCap
-    ? `<p><a href="${searchUrl}">Browse all ${countLabel} results in the interactive search &rarr;</a></p>`
-    : `<p><a href="${searchUrl}">Refine this search &rarr;</a></p>`;
 
   return `<!doctype html>
 <html lang="en">
@@ -117,15 +117,43 @@ function renderPage({ slug, resolved, jobs, siteOrigin }) {
         </header>
 
         <h1>${escapeHtml(title.replace(" | 12GetAJob", ""))}</h1>
-        <p class="tagline">${countLabel} open role${jobs.length === 1 ? "" : "s"}, updated continuously. <a href="${searchUrl}">Save this search as a daily email alert &rarr;</a></p>
+        <p class="tagline">${escapeHtml(description)}</p>
+
+        <div class="filters">
+          <input type="search" id="q" placeholder="Job title or keyword&hellip;" aria-label="Job title or keyword">
+          <select id="category-filter" aria-label="Category"><option value="">Any category</option></select>
+          <select id="segment-filter" aria-label="Segment">
+            <option value="">Any segment</option>
+            <option value="startup">Startups &amp; scale-ups</option>
+          </select>
+          <div style="display:flex; gap:8px; flex:1 1 220px;">
+            <select id="location" aria-label="Location"><option value="">Any location</option></select>
+            <label style="display:flex; align-items:center; gap:6px; font-size:14px; white-space:nowrap;">
+              <input type="checkbox" id="remote-only"> Remote
+            </label>
+          </div>
+          <input type="text" id="exclude" placeholder="Exclude keywords (comma-separated)&hellip;" aria-label="Exclude keywords">
+        </div>
+
+        <p class="tagline" style="margin:16px 0 4px;">Or browse by location:</p>
+        <div id="location-chips" class="chip-list"></div>
       </div>
     </div>
 
     <div class="wrap">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <p id="result-count" class="tagline" style="margin:0;" aria-live="polite">${count} result${count === 1 ? "" : "s"} on this page</p>
+        <a id="alert-link" href="/alerts">Get alerts for this search &rarr;</a>
+      </div>
+
       <div id="results">${cards}
       </div>
 
-      ${seeMore}
+      <div class="pagination">
+        <button id="prev-page">&larr; Previous</button>
+        <span id="page-indicator"></span>
+        <button id="next-page">Next &rarr;</button>
+      </div>
 
       <footer role="contentinfo">
         <a href="https://github.com/woskam/job-radar">job-radar</a> &middot;
@@ -135,6 +163,9 @@ function renderPage({ slug, resolved, jobs, siteOrigin }) {
       </footer>
     </div>
   </main>
+
+  <script>window.__INITIAL_FILTERS__ = ${JSON.stringify(initialFiltersFor(resolved))};</script>
+  <script type="module" src="/assets/jobs-search.js"></script>
 </body>
 </html>`;
 }
@@ -169,6 +200,6 @@ export async function onRequestGet(context) {
   }
 
   const siteOrigin = new URL(request.url).origin;
-  const html = renderPage({ slug, resolved, jobs: data.results, siteOrigin });
+  const html = renderPage({ resolved, jobs: data.results, count: data.count, siteOrigin, slug });
   return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });
 }
