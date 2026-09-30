@@ -1,0 +1,5 @@
+Contact: https://github.com/woskam/job-radar-hub/issues
+Contact: https://github.com/woskam/job-radar-site/issues
+Expires: 2027-09-30T00:00:00Z
+Preferred-Languages: en, nl
+Canonical: https://12getajob.com/.well-known/security.txt

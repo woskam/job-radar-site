@@ -2,12 +2,23 @@
 # Advertises the MCP server on every response, per the discoverability
 # pattern documented at https://specification.website/mcp/.
 #
-# Strict-Transport-Security and the clickjacking headers below are the two
-# required items from specification.website/spec/security/ that Cloudflare
-# Pages does not set by default (unlike X-Content-Type-Options and
-# Referrer-Policy, which it already adds automatically).
+# Strict-Transport-Security and the clickjacking/CSP/Permissions-Policy
+# headers below are items from specification.website/spec/security/ that
+# Cloudflare Pages does not set by default (unlike X-Content-Type-Options
+# and Referrer-Policy, which it already adds automatically).
+#
+# script-src allowlists this exact site's three static inline <script>
+# blocks by content hash (index.html, alerts.html, companies.html) instead
+# of 'unsafe-inline' -- an injected <script> tag from anywhere else won't
+# match any of these hashes, so it won't execute. If one of those inline
+# scripts' content ever changes, its hash must be recomputed here too, or
+# the page breaks (CSP silently blocks the mismatched script). functions/
+# jobs/[slug].js is the one page rendered per-request rather than served
+# static, so it sets its own Content-Security-Policy with a real nonce
+# instead of relying on this file -- see that Function's own CSP_HEADER.
 /*
   Link: <https://12getajob.com/.well-known/mcp/server-card.json>; rel="mcp"
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Frame-Options: DENY
-  Content-Security-Policy: frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://www.googletagmanager.com 'sha256-5/QLZuAFiZODkYaHOnWLWBlxRj+8bnHBDS70DBwjyVM=' 'sha256-0lGKnTxvlUzRUuYxH88R7CEcKvXzVozsKNdVeEr6EqQ=' 'sha256-iUdOHn6+GnDSYKKFPIfnAv7MQAyAdVA+wXzC9RKsRW4='; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self'; connect-src 'self' https://hub.12getajob.com https://*.google-analytics.com https://www.googletagmanager.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'
+  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=(), interest-cohort=()

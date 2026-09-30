@@ -25,10 +25,37 @@ import { CATEGORIES } from "../../assets/categories.js";
 const HUB_URL = "https://hub.12getajob.com";
 const PAGE_SIZE = 50; // matches assets/jobs-search.js's own PAGE_SIZE
 
+// Same policy as _headers' site-wide CSP, except script-src uses this
+// page's own per-request nonce instead of the fixed sha256 hashes the
+// static pages need (there's no way to compute a hash in advance for
+// content that includes the request's own slug).
+const CSP_HEADER = (nonce) =>
+  "default-src 'self'; " +
+  `script-src 'self' 'nonce-${nonce}' https://www.googletagmanager.com; ` +
+  "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; " +
+  "font-src https://fonts.gstatic.com; " +
+  "img-src 'self'; " +
+  "connect-src 'self' https://hub.12getajob.com https://*.google-analytics.com https://www.googletagmanager.com; " +
+  "object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";
+
 function escapeHtml(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
   }[c]));
+}
+
+// JSON.stringify alone doesn't escape "<" -- a slug (attacker-controlled,
+// reflected into location_mode below) containing a literal "</script>"
+// would otherwise close the tag early and let arbitrary markup follow it,
+// regardless of CSP. < is valid inside both a JS string and the
+// surrounding HTML, so this is safe to drop straight into a <script> body.
+function jsonForScript(value) {
+  return JSON.stringify(value).replace(/</g, "\\u003c");
+}
+
+function randomNonce() {
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  return btoa(String.fromCharCode(...bytes));
 }
 
 function resolveSlug(slug) {
@@ -56,7 +83,7 @@ function initialFiltersFor(resolved) {
   return { location_mode: resolved.locationMode };
 }
 
-function renderPage({ resolved, jobs, count, siteOrigin, slug }) {
+function renderPage({ resolved, jobs, count, siteOrigin, slug, nonce }) {
   const title = resolved.kind === "remote"
     ? "Remote jobs | 12GetAJob"
     : resolved.kind === "category"
@@ -221,8 +248,8 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug }) {
     </div>
   </main>
 
-  <script>window.__INITIAL_FILTERS__ = ${JSON.stringify(initialFiltersFor(resolved))};</script>
-  <script type="module" src="/assets/jobs-search.js"></script>
+  <script nonce="${nonce}">window.__INITIAL_FILTERS__ = ${jsonForScript(initialFiltersFor(resolved))};</script>
+  <script type="module" src="/assets/jobs-search.js" nonce="${nonce}"></script>
 </body>
 </html>`;
 }
@@ -257,6 +284,15 @@ export async function onRequestGet(context) {
   }
 
   const siteOrigin = new URL(request.url).origin;
-  const html = renderPage({ resolved, jobs: data.results, count: data.count, siteOrigin, slug });
-  return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+  const nonce = randomNonce();
+  const html = renderPage({ resolved, jobs: data.results, count: data.count, siteOrigin, slug, nonce });
+  return new Response(html, {
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+      // Overrides the static _headers CSP for this path -- this is the one
+      // page on the site rendered per-request, so unlike everywhere else it
+      // can use a real nonce instead of a fixed script hash.
+      "Content-Security-Policy": CSP_HEADER(nonce),
+    },
+  });
 }
