@@ -198,14 +198,22 @@ body {
   /* .feature-block's own align-items: center (set for the desktop row
      layout, to vertically center .copy against .visual) carries over
      into this column layout as cross-axis alignment -- meaning .visual
-     shrink-wraps to its content's width instead of filling the column,
-     leaving its flex-wrap child (#location-chips) to size itself against
-     that ambiguous, not-yet-settled width. Safari has been seen to get
-     this wrong: the chip list wraps against one width while the
-     background box paints to a different (usually narrower) one, so the
-     two disagree at the edges -- explicit stretch removes the ambiguity
-     entirely by giving .visual the column's real, fixed width up front. */
+     shrink-wraps to its content's width instead of filling the column.
+     Explicit stretch gives it the column's real, fixed width up front. */
   .feature-block, .feature-block.reverse { flex-direction: column; align-items: stretch; }
+  /* The actual bug: .visual's own `flex: 1 1 360px` sets a 360px basis
+     meant for desktop's WIDTH (row-direction main axis). Once
+     flex-direction flips to column above, that same basis applies to
+     HEIGHT instead -- .visual's main axis is now vertical -- pinning it
+     near 360px regardless of how tall its content (#location-chips, ~10
+     wrapped rows, 500px+) actually is. .visual's own `align-items:
+     center` then centers that taller content inside the too-short box,
+     so it overflows evenly top AND bottom -- exactly the "first row and
+     last row stick out, middle rows are covered" shape reported, and
+     exactly why the width-focused stretch fix above didn't touch it.
+     flex-basis: auto lets the item's height come from its content
+     instead of a basis value that was never meant for this axis. */
+  .feature-block .visual { flex-basis: auto; }
 }
 
 .cta-section {
