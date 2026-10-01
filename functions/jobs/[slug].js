@@ -163,7 +163,8 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug, nonce }) {
             </label>
           </div>
           <input type="text" id="exclude" placeholder="Exclude keywords (comma-separated)&hellip;" aria-label="Exclude keywords">
-          <input type="text" id="company" placeholder="Company&hellip;" aria-label="Company">
+          <input type="text" id="company" list="company-options" placeholder="Company&hellip;" aria-label="Company" autocomplete="off">
+          <datalist id="company-options"></datalist>
         </div>
 
         <p class="tagline" style="margin:16px 0 4px;">Or browse by location:</p>

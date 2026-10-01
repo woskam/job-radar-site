@@ -8,6 +8,7 @@
 // real job cards server-rendered before this script ever runs.
 import { CATEGORIES } from '/assets/categories.js';
 import { LOCATIONS } from '/assets/locations.js';
+import { COMPANIES } from '/assets/companies.js';
 
 const categorySelect = document.getElementById('category-filter');
 for (const c of CATEGORIES) {
@@ -74,6 +75,7 @@ const locationInput = document.getElementById('location');
 const remoteOnly = document.getElementById('remote-only');
 const excludeInput = document.getElementById('exclude');
 const companyInput = document.getElementById('company');
+const companyOptions = document.getElementById('company-options');
 const resultsEl = document.getElementById('results');
 const countEl = document.getElementById('result-count');
 const pageIndicator = document.getElementById('page-indicator');
@@ -182,6 +184,23 @@ segmentFilter.addEventListener('change', searchFromStart);
 locationInput.addEventListener('change', () => { if (!maybeNavigateToLandingPage()) searchFromStart(); });
 remoteOnly.addEventListener('change', () => { if (!maybeNavigateToLandingPage()) searchFromStart(); });
 excludeInput.addEventListener('input', searchFromStart);
+const MAX_COMPANY_SUGGESTIONS = 15;
+function updateCompanySuggestions() {
+  const value = companyInput.value.trim().toLowerCase();
+  companyOptions.innerHTML = '';
+  if (value.length < 2) return; // 1000+ companies -- wait for a couple of letters before suggesting any
+  const fragment = document.createDocumentFragment();
+  let shown = 0;
+  for (const name of COMPANIES) {
+    if (!name.toLowerCase().includes(value)) continue;
+    const opt = document.createElement('option');
+    opt.value = name;
+    fragment.appendChild(opt);
+    if (++shown >= MAX_COMPANY_SUGGESTIONS) break; // COMPANIES is sorted, so this is also alphabetical
+  }
+  companyOptions.appendChild(fragment);
+}
+companyInput.addEventListener('input', updateCompanySuggestions);
 companyInput.addEventListener('input', searchFromStart);
 prevBtn.addEventListener('click', () => { offset = Math.max(0, offset - PAGE_SIZE); search(); });
 nextBtn.addEventListener('click', () => { offset += PAGE_SIZE; search(); });
