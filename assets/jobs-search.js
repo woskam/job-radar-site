@@ -73,6 +73,7 @@ const segmentFilter = document.getElementById('segment-filter');
 const locationInput = document.getElementById('location');
 const remoteOnly = document.getElementById('remote-only');
 const excludeInput = document.getElementById('exclude');
+const companyInput = document.getElementById('company');
 const resultsEl = document.getElementById('results');
 const countEl = document.getElementById('result-count');
 const pageIndicator = document.getElementById('page-indicator');
@@ -87,7 +88,7 @@ const alertLink = document.getElementById('alert-link');
 // or location+category together, has no single landing page for it
 // and stays on the live /jobs search.
 function landingPageSlug() {
-  if (q.value.trim() || segmentFilter.value || excludeInput.value.trim()) return null;
+  if (q.value.trim() || segmentFilter.value || excludeInput.value.trim() || companyInput.value.trim()) return null;
   const loc = remoteOnly.checked
     ? 'remote'
     : locationInput.value
@@ -111,6 +112,7 @@ function currentFilters() {
     segment: segmentFilter.value,
     location_contains: remoteOnly.checked ? 'remote' : locationInput.value.trim(),
     exclude_keywords: excludeInput.value.trim(),
+    company: companyInput.value.trim(),
   };
 }
 
@@ -123,6 +125,7 @@ function updateAlertLink() {
   if (remoteOnly.checked) params.set('location_mode', 'remote');
   else if (f.location_contains) params.set('location_mode', f.location_contains);
   if (f.exclude_keywords) params.set('exclude_keywords', f.exclude_keywords);
+  if (f.company) params.set('company', f.company);
   alertLink.href = '/alerts' + (params.toString() ? '?' + params.toString() : '');
 }
 
@@ -179,6 +182,7 @@ segmentFilter.addEventListener('change', searchFromStart);
 locationInput.addEventListener('change', () => { if (!maybeNavigateToLandingPage()) searchFromStart(); });
 remoteOnly.addEventListener('change', () => { if (!maybeNavigateToLandingPage()) searchFromStart(); });
 excludeInput.addEventListener('input', searchFromStart);
+companyInput.addEventListener('input', searchFromStart);
 prevBtn.addEventListener('click', () => { offset = Math.max(0, offset - PAGE_SIZE); search(); });
 nextBtn.addEventListener('click', () => { offset += PAGE_SIZE; search(); });
 
@@ -193,5 +197,6 @@ if (initial.get('segment')) segmentFilter.value = initial.get('segment');
 if (initial.get('location_mode') === 'remote') remoteOnly.checked = true;
 else if (initial.get('location_mode')) locationInput.value = initial.get('location_mode');
 if (initial.get('exclude_keywords')) excludeInput.value = initial.get('exclude_keywords');
+if (initial.get('company')) companyInput.value = initial.get('company');
 
 search();
