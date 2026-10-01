@@ -24,13 +24,40 @@ for (const loc of LOCATIONS) {
   locationSelect.appendChild(opt);
 }
 
+// Read before building the chips (not just later, at prefill time) --
+// a landing page with a location already active needs that to decide
+// whether to collapse the chip list below.
+const initialSource = window.__INITIAL_FILTERS__
+  || Object.fromEntries(new URLSearchParams(window.location.search));
+const initial = { get: (k) => initialSource[k] || null };
+
 const chipsEl = document.getElementById('location-chips');
+const chipsFragment = document.createDocumentFragment();
 for (const loc of LOCATIONS) {
   const a = document.createElement('a');
   a.className = 'chip-link';
   a.href = `/jobs/${loc.slug}`;
   a.textContent = loc.name;
-  chipsEl.appendChild(a);
+  chipsFragment.appendChild(a);
+}
+chipsEl.appendChild(chipsFragment);
+
+// A location is already selected (via the landing page's own slug, or a
+// location_mode query param) -- the full ~30-chip list is then mostly
+// redundant with what's already active, and on mobile it pushes the
+// actual results far down the page. Collapse it behind a toggle instead
+// of always showing it expanded.
+if (initial.get('location_mode')) {
+  chipsEl.hidden = true;
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'chip-link';
+  toggle.textContent = 'Show all cities';
+  toggle.addEventListener('click', () => {
+    chipsEl.hidden = false;
+    toggle.remove();
+  });
+  chipsEl.insertAdjacentElement('beforebegin', toggle);
 }
 
 const PAGE_SIZE = 50;
@@ -153,9 +180,8 @@ nextBtn.addEventListener('click', () => { offset += PAGE_SIZE; search(); });
 // Prefill from the landing page's slug-derived filter (window.__INITIAL_FILTERS__,
 // set by functions/jobs/[slug].js before this module loads) or, on the plain
 // /jobs page, from query params (e.g. arriving from a link elsewhere).
-const initialSource = window.__INITIAL_FILTERS__
-  || Object.fromEntries(new URLSearchParams(window.location.search));
-const initial = { get: (k) => initialSource[k] || null };
+// initialSource/initial themselves are declared near the top of this file,
+// before the location-chips are built, which also needs to know this.
 if (initial.get('keywords')) q.value = initial.get('keywords');
 if (initial.get('category')) categorySelect.value = initial.get('category');
 if (initial.get('segment')) segmentFilter.value = initial.get('segment');
