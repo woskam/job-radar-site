@@ -48,13 +48,18 @@ chipsEl.appendChild(chipsFragment);
 // actual results far down the page. Collapse it behind a toggle instead
 // of always showing it expanded.
 if (initial.get('location_mode')) {
-  chipsEl.hidden = true;
+  // .chip-list sets its own `display: flex` -- an author-origin rule,
+  // which beats the UA stylesheet's `[hidden] { display: none }`
+  // regardless of specificity (origin is resolved before specificity in
+  // the cascade), so plain `.hidden = true` silently does nothing here.
+  // An inline style always wins over a class rule, hidden or not.
+  chipsEl.style.display = 'none';
   const toggle = document.createElement('button');
   toggle.type = 'button';
   toggle.className = 'chip-link';
   toggle.textContent = 'Show all cities';
   toggle.addEventListener('click', () => {
-    chipsEl.hidden = false;
+    chipsEl.style.display = '';
     toggle.remove();
   });
   chipsEl.insertAdjacentElement('beforebegin', toggle);
