@@ -57,6 +57,18 @@ Edit those, then redeploy (see below) -- nothing else needs to change.
 python3 -m http.server 8000
 ```
 
+## City + category pages
+
+`/jobs/{city}/{category}` (e.g. `/jobs/berlin/fintech`) only exists for combinations
+listed in `assets/combos.js`: at least 20 live listings, from at least 3 companies, with
+no single company above 60%. Everything else is a 404, so there's no grid of thin pages.
+Regenerate the list (and the matching block in `sitemap.xml`) every few weeks, or after
+changing `assets/locations.js`:
+
+```bash
+node scripts/generate-combos.mjs
+```
+
 ## Deploying
 
 ```bash

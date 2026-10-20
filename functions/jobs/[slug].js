@@ -20,17 +20,19 @@
 // No schema.org/JobPosting structured data yet, and job cards still link
 // to the original ATS posting (job.url) rather than a URL of our own --
 // both are deliberately separate, later steps.
-import { CATEGORIES } from "../../assets/categories.js";
+import { CATEGORIES, CATEGORY_LABELS } from "../../assets/categories.js";
 import { CITY_CONTENT } from "../../assets/city-content.js";
+import { COMBOS } from "../../assets/combos.js";
+import { LOCATIONS } from "../../assets/locations.js";
 
-const HUB_URL = "https://hub.12getajob.com";
-const PAGE_SIZE = 50; // matches assets/jobs-search.js's own PAGE_SIZE
+export const HUB_URL = "https://hub.12getajob.com";
+export const PAGE_SIZE = 50; // matches assets/jobs-search.js's own PAGE_SIZE
 
 // Same policy as _headers' site-wide CSP, except script-src uses this
 // page's own per-request nonce instead of the fixed sha256 hashes the
 // static pages need (there's no way to compute a hash in advance for
 // content that includes the request's own slug).
-const CSP_HEADER = (nonce) =>
+export const CSP_HEADER = (nonce) =>
   "default-src 'self'; " +
   `script-src 'self' 'nonce-${nonce}' https://www.googletagmanager.com; ` +
   "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; " +
@@ -39,7 +41,7 @@ const CSP_HEADER = (nonce) =>
   "connect-src 'self' https://hub.12getajob.com https://*.google-analytics.com https://www.googletagmanager.com; " +
   "object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";
 
-function escapeHtml(s) {
+export function escapeHtml(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
   }[c]));
@@ -54,7 +56,7 @@ function jsonForScript(value) {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
 
-function randomNonce() {
+export function randomNonce() {
   const bytes = crypto.getRandomValues(new Uint8Array(16));
   return btoa(String.fromCharCode(...bytes));
 }
@@ -73,9 +75,29 @@ function resolveSlug(slug) {
 
   const category = CATEGORIES.find((c) => c.toLowerCase() === normalized);
   if (category) {
-    return { kind: "category", category, label: titleCase(category.replace(/_/g, " ")) };
+    return { kind: "category", category, label: categoryLabel(category) };
   }
   return { kind: "location", locationMode: spaced, label: titleCase(spaced) };
+}
+
+export function categoryLabel(category) {
+  return CATEGORY_LABELS[category] || category.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+export function cityName(citySlug) {
+  const loc = LOCATIONS.find((l) => l.slug === citySlug);
+  return loc ? loc.name : null;
+}
+
+// "Fintech · Climate tech · ..." link row, used under the text on both a
+// city page (industries in this city) and a category page (cities for
+// this industry). Only lists combinations in assets/combos.js, the ones
+// with enough listings to deserve their own page.
+function linkList(heading, links, level = "h3") {
+  if (!links.length) return "";
+  return `
+        <${level}>${escapeHtml(heading)}</${level}>
+        <p class="combo-links">${links.map(({ href, text }) => `<a href="${escapeHtml(href)}">${escapeHtml(text)}</a>`).join("\n          ")}</p>`;
 }
 
 function initialFiltersFor(resolved) {
@@ -84,7 +106,7 @@ function initialFiltersFor(resolved) {
   return { location_mode: resolved.locationMode };
 }
 
-function renderPage({ resolved, jobs, count, siteOrigin, slug, nonce }) {
+function pageFor(resolved, slug) {
   const title = resolved.kind === "remote"
     ? "Remote jobs | 12GetAJob"
     : resolved.kind === "category"
@@ -95,7 +117,35 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug, nonce }) {
     : resolved.kind === "category"
       ? `Live ${resolved.label} job listings, updated all day. Search, filter, and save it as a daily email alert.`
       : `Live job listings in ${resolved.label}, updated all day. Search, filter, and save it as a daily email alert.`;
-  const canonical = `${siteOrigin}/jobs/${slug}`;
+
+  // Written intro for city pages (see assets/city-content.js), placed
+  // below the listings so the jobs stay the first thing visitors see.
+  // Followed by links to this city's (or category's) combination pages.
+  const key = slug.toLowerCase();
+  let guide = "";
+  if (resolved.kind === "location") {
+    const paragraphs = Object.hasOwn(CITY_CONTENT, key) ? CITY_CONTENT[key] : [];
+    const links = COMBOS.filter((c) => c.city === key)
+      .map((c) => ({ href: `/jobs/${c.city}/${c.category}`, text: `${categoryLabel(c.category)} jobs in ${resolved.label}` }));
+    if (paragraphs.length || links.length) {
+      guide = `
+        <h2>Working in ${escapeHtml(resolved.label)}</h2>
+        ${paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join("\n        ")}${linkList("By industry", links)}`;
+    }
+  } else if (resolved.kind === "category") {
+    const links = COMBOS.filter((c) => c.category === resolved.category)
+      .map((c) => ({ href: `/jobs/${c.city}/${c.category}`, text: `${resolved.label} jobs in ${cityName(c.city)}` }));
+    guide = linkList(`${resolved.label} jobs by city`, links, "h2");
+  }
+
+  return { title, description, path: `/jobs/${slug}`, initialFilters: initialFiltersFor(resolved), guide };
+}
+
+// Shared by this Function and ./[city]/[category].js. `page` is
+// { title, description, path, initialFilters, guide, noindex }.
+export function renderPage({ page, jobs, count, siteOrigin, nonce }) {
+  const { title, description, guide } = page;
+  const canonical = `${siteOrigin}${page.path}`;
 
   const cards = jobs.map((job) => {
     const badges = [job.category, job.segment].filter(Boolean)
@@ -108,15 +158,8 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug, nonce }) {
         </div>`;
   }).join("\n");
 
-  // Written intro for city pages (see assets/city-content.js), placed
-  // below the listings so the jobs stay the first thing visitors see.
-  const cityKey = slug.toLowerCase();
-  const cityParagraphs = resolved.kind === "location" && Object.hasOwn(CITY_CONTENT, cityKey)
-    ? CITY_CONTENT[cityKey] : null;
-  const cityGuide = cityParagraphs ? `
-      <section class="city-guide">
-        <h2>Working in ${escapeHtml(resolved.label)}</h2>
-        ${cityParagraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join("\n        ")}
+  const guideSection = guide ? `
+      <section class="city-guide">${guide}
       </section>
 ` : "";
 
@@ -129,7 +172,7 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug, nonce }) {
   <link rel="icon" href="/favicon.ico" sizes="32x32">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <title>${escapeHtml(title)}</title>
-  <meta name="description" content="${escapeHtml(description)}">
+  <meta name="description" content="${escapeHtml(description)}">${page.noindex ? '\n  <meta name="robots" content="noindex">' : ""}
   <meta name="theme-color" content="#0e0e12" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0b0b0d" media="(prefers-color-scheme: dark)">
   <meta name="color-scheme" content="light dark">
@@ -141,7 +184,7 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug, nonce }) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css?v=11">
+  <link rel="stylesheet" href="/assets/style.css?v=12">
   <script type="module" src="/assets/analytics.js"></script>
 </head>
 <body>
@@ -199,7 +242,7 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug, nonce }) {
         <span id="page-indicator"></span>
         <button id="next-page">Next &rarr;</button>
       </div>
-${cityGuide}
+${guideSection}
       <footer class="site-footer" role="contentinfo">
         <div class="site-footer-grid">
           <div>
@@ -263,7 +306,7 @@ ${cityGuide}
     </div>
   </main>
 
-  <script nonce="${nonce}">window.__INITIAL_FILTERS__ = ${jsonForScript(initialFiltersFor(resolved))};</script>
+  <script nonce="${nonce}">window.__INITIAL_FILTERS__ = ${jsonForScript(page.initialFilters)};</script>
   <script type="module" src="/assets/jobs-search.js" nonce="${nonce}"></script>
 </body>
 </html>`;
@@ -300,7 +343,7 @@ export async function onRequestGet(context) {
 
   const siteOrigin = new URL(request.url).origin;
   const nonce = randomNonce();
-  const html = renderPage({ resolved, jobs: data.results, count: data.count, siteOrigin, slug, nonce });
+  const html = renderPage({ page: pageFor(resolved, slug), jobs: data.results, count: data.count, siteOrigin, nonce });
   return new Response(html, {
     headers: {
       "Content-Type": "text/html; charset=utf-8",

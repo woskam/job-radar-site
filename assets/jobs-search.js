@@ -6,14 +6,15 @@
 // where its initial filter state comes from (window.__INITIAL_FILTERS__,
 // set by the Function before this module loads) and in already having
 // real job cards server-rendered before this script ever runs.
-import { CATEGORIES } from '/assets/categories.js';
+import { CATEGORIES, CATEGORY_LABELS } from '/assets/categories.js';
+import { COMBOS } from '/assets/combos.js';
 import { LOCATIONS } from '/assets/locations.js';
 import { COMPANIES } from '/assets/companies.js';
 
 const categorySelect = document.getElementById('category-filter');
 for (const c of CATEGORIES) {
   const opt = document.createElement('option');
-  opt.value = c; opt.textContent = c;
+  opt.value = c; opt.textContent = CATEGORY_LABELS[c] || c;
   categorySelect.appendChild(opt);
 }
 
@@ -87,8 +88,9 @@ const alertLink = document.getElementById('alert-link');
 // exactly what a /jobs/{slug} landing page already represents -- so
 // navigate there instead of live-filtering in place, same URL a chip
 // click produces. Anything combined with a keyword/segment/exclude,
-// or location+category together, has no single landing page for it
-// and stays on the live /jobs search.
+// stays on the live /jobs search. Location+category together goes to
+// /jobs/{city}/{category} only when that combination has its own page
+// (assets/combos.js), otherwise it stays on the live search too.
 function landingPageSlug() {
   if (q.value.trim() || segmentFilter.value || excludeInput.value.trim() || companyInput.value.trim()) return null;
   const loc = remoteOnly.checked
@@ -97,7 +99,7 @@ function landingPageSlug() {
       ? (LOCATIONS.find((l) => l.name.toLowerCase() === locationInput.value) || {}).slug
       : null;
   const cat = categorySelect.value || null;
-  if (loc && cat) return null;
+  if (loc && cat) return COMBOS.some((c) => c.city === loc && c.category === cat) ? `${loc}/${cat}` : null;
   return loc || cat || null;
 }
 
