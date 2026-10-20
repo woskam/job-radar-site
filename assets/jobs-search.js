@@ -134,7 +134,7 @@ function updateAlertLink() {
 function renderResults(data) {
   resultsEl.innerHTML = '';
   if (!data.results.length) {
-    resultsEl.innerHTML = '<p class="tagline">No matching listings right now -- try widening the filters.</p>';
+    resultsEl.innerHTML = '<p class="tagline">No matching listings right now. Try widening the filters.</p>';
   }
   for (const job of data.results) {
     const card = document.createElement('div');

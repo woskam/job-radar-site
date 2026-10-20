@@ -21,6 +21,7 @@
 // to the original ATS posting (job.url) rather than a URL of our own --
 // both are deliberately separate, later steps.
 import { CATEGORIES } from "../../assets/categories.js";
+import { CITY_CONTENT } from "../../assets/city-content.js";
 
 const HUB_URL = "https://hub.12getajob.com";
 const PAGE_SIZE = 50; // matches assets/jobs-search.js's own PAGE_SIZE
@@ -90,10 +91,10 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug, nonce }) {
       ? `${resolved.label} jobs | 12GetAJob`
       : `Jobs in ${resolved.label} | 12GetAJob`;
   const description = resolved.kind === "remote"
-    ? "Live remote job listings, updated continuously -- search, filter, and save it as a daily email alert."
+    ? "Live remote job listings, updated all day. Search, filter, and save it as a daily email alert."
     : resolved.kind === "category"
-      ? `Live ${resolved.label} job listings, updated continuously -- search, filter, and save it as a daily email alert.`
-      : `Live job listings in ${resolved.label}, updated continuously -- search, filter, and save it as a daily email alert.`;
+      ? `Live ${resolved.label} job listings, updated all day. Search, filter, and save it as a daily email alert.`
+      : `Live job listings in ${resolved.label}, updated all day. Search, filter, and save it as a daily email alert.`;
   const canonical = `${siteOrigin}/jobs/${slug}`;
 
   const cards = jobs.map((job) => {
@@ -106,6 +107,18 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug, nonce }) {
           <div class="badges">${badges}</div>
         </div>`;
   }).join("\n");
+
+  // Written intro for city pages (see assets/city-content.js), placed
+  // below the listings so the jobs stay the first thing visitors see.
+  const cityKey = slug.toLowerCase();
+  const cityParagraphs = resolved.kind === "location" && Object.hasOwn(CITY_CONTENT, cityKey)
+    ? CITY_CONTENT[cityKey] : null;
+  const cityGuide = cityParagraphs ? `
+      <section class="city-guide">
+        <h2>Working in ${escapeHtml(resolved.label)}</h2>
+        ${cityParagraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join("\n        ")}
+      </section>
+` : "";
 
   return `<!doctype html>
 <html lang="en">
@@ -128,7 +141,7 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug, nonce }) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css?v=10">
+  <link rel="stylesheet" href="/assets/style.css?v=11">
   <script type="module" src="/assets/analytics.js"></script>
 </head>
 <body>
@@ -186,7 +199,7 @@ function renderPage({ resolved, jobs, count, siteOrigin, slug, nonce }) {
         <span id="page-indicator"></span>
         <button id="next-page">Next &rarr;</button>
       </div>
-
+${cityGuide}
       <footer class="site-footer" role="contentinfo">
         <div class="site-footer-grid">
           <div>

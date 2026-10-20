@@ -536,3 +536,7 @@ th { color: var(--muted); font-weight: 700; }
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Written intro under the listings on city pages (/jobs/{slug}). */
+.city-guide { margin-top: 48px; }
+.city-guide p { font-size: 15.5px; line-height: 1.7; color: var(--muted); max-width: 65ch; }

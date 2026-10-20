@@ -46,7 +46,7 @@
 
     <h2>Getting an API key</h2>
     <p>
-      No self-serve signup yet -- keys are issued by hand while this is small.
+      No self-serve signup yet. Keys are issued by hand while this is small.
       <a href="https://github.com/woskam/job-radar-hub/issues">Open an issue on job-radar-hub</a>
       to request one, with a short note on what you're building.
     </p>
@@ -76,8 +76,8 @@
         <tr><td><code>title_contains</code></td><td>Substring match on title</td></tr>
         <tr><td><code>location_contains</code></td><td>Substring match on location</td></tr>
         <tr><td><code>category</code></td><td>Exact match, e.g. <code>fintech</code> (same vocabulary as <a href="/companies">/companies</a>)</td></tr>
-        <tr><td><code>segment</code></td><td>Exact match -- currently just <code>startup</code> or omitted</td></tr>
-        <tr><td><code>active</code></td><td><code>1</code> (default) or <code>0</code> -- inactive listings are ones no longer seen in the source's latest scrape</td></tr>
+        <tr><td><code>segment</code></td><td>Exact match, currently just <code>startup</code> or omitted</td></tr>
+        <tr><td><code>active</code></td><td><code>1</code> (default) or <code>0</code>. Inactive listings are ones no longer seen in the source's latest scrape</td></tr>
         <tr><td><code>limit</code></td><td>Default 50, max 200</td></tr>
         <tr><td><code>offset</code></td><td>Default 0</td></tr>
       </table>
@@ -112,20 +112,20 @@
         <tr><th scope="row">Endpoint</th><td><code>https://mcp.12getajob.com/mcp</code></td></tr>
         <tr><th scope="row">Transport</th><td>Streamable HTTP</td></tr>
         <tr><th scope="row">Auth</th><td>Same bearer token as the REST API</td></tr>
-        <tr><th scope="row">Tools</th><td><code>search_jobs</code> -- same filters as <code>GET /jobs</code> above</td></tr>
+        <tr><th scope="row">Tools</th><td><code>search_jobs</code>, with the same filters as <code>GET /jobs</code> above</td></tr>
       </table>
       <p>Server card: <a href="/.well-known/mcp/server-card.json">/.well-known/mcp/server-card.json</a></p>
     </div>
 
     <h2>What's not in here</h2>
     <p>
-      No relevance scores, no application status, no letters or CVs -- that's all personal
+      No relevance scores, no application status, no letters or CVs. That's all personal
       data that stays on whichever Job Radar instance is pushing listings in. This API only
       ever sees the generic listing fields.
     </p>
     <p>
       No "apply" or "send" endpoint, and there never will be one. This API stops at
-      "here's the listing data" -- whatever you do with it (draft something, apply,
+      "here's the listing data". Whatever you do with it (draft something, apply,
       ignore it) happens entirely on your end.
     </p>
 

@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Job Radar Hub API",
-    "description": "A public, tokengated read API of generic job-listing data, fed by a push from a Job Radar instance's own scrape cycle. Carries no personal data -- no relevance score, no application status, no letters/CVs. No apply/send endpoint, and there never will be one: this API stops at listing data, what you do with it is entirely up to you.",
+    "description": "A public, tokengated read API of generic job-listing data, fed by a push from a Job Radar instance's own scrape cycle. Carries no personal data: no relevance score, no application status, no letters/CVs. No apply/send endpoint, and there never will be one: this API stops at listing data, what you do with it is entirely up to you.",
     "version": "1.0.0",
     "license": {
       "name": "MIT",
@@ -24,7 +24,7 @@
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "description": "API key issued by hand -- see https://12getajob.com/api for how to request one."
+        "description": "API key issued by hand. See https://12getajob.com/api for how to request one."
       }
     },
     "schemas": {
@@ -59,12 +59,12 @@
           "scraped_at": {
             "type": "string",
             "format": "date-time",
-            "description": "First-seen time, fixed -- does not move on later sightings"
+            "description": "First-seen time, fixed. Does not move on later sightings"
           },
           "last_seen_at": {
             "type": "string",
             "format": "date-time",
-            "description": "This Hub's own receive time, updated on every ingest that touches this listing -- the freshness signal"
+            "description": "This Hub's own receive time, updated on every ingest that touches this listing. This is the freshness signal"
           }
         }
       }

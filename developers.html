@@ -39,11 +39,11 @@
     <h1>For developers</h1>
     <p class="tagline">12GetAJob's job data comes from Job Radar, an open-source pipeline you can self-host, and Job Radar Hub, a public API/MCP server that serves it.</p>
 
-    <h2>Job Radar -- the self-hosted pipeline</h2>
+    <h2>Job Radar: the self-hosted pipeline</h2>
     <p>
       A self-hosted tool that scrapes career pages across 100+ companies
       (Workday, Greenhouse, SmartRecruiters, SAP SuccessFactors, and more), scores matches
-      against your own profile, and drafts cover letters and tailored CVs with an LLM --
+      against your own profile, and drafts cover letters and tailored CVs with an LLM,
       with a human reviewing everything before anything is ever sent.
     </p>
     <div class="card">
@@ -51,16 +51,16 @@
       <p>
         The whole personal pipeline: scrapers, matching, letter/CV generation, a review
         dashboard. Designed to run comfortably on something as small as a Raspberry Pi.
-        MIT-licensed. Nothing is ever sent automatically -- you approve every step.
+        MIT-licensed. Nothing is ever sent automatically. You approve every step.
       </p>
     </div>
 
-    <h2>Job Radar Hub -- a public API of job listings</h2>
+    <h2>Job Radar Hub: a public API of job listings</h2>
     <div class="card">
       <h3><a href="https://github.com/woskam/job-radar-hub">github.com/woskam/job-radar-hub</a></h3>
       <p>
         A separate, tokengated read API serving the generic listing data a Job Radar
-        instance finds -- title, company, location, URL, description. No personal data:
+        instance finds: title, company, location, URL, description. No personal data:
         no relevance scores, no application status, no letters or CVs. Fed by a scrape
         cycle that already knows how to talk to dozens of different ATS platforms, so you
         don't have to reverse-engineer them yourself. This is also what powers 12GetAJob's
@@ -74,7 +74,7 @@
       <p>
         The same data as the REST API, over the Model Context Protocol, for MCP-aware
         agent clients. One tool: <code>search_jobs</code> (company, source, title/location
-        substring, category, segment, active status -- same filters as <code>GET /jobs</code>).
+        substring, category, segment, active status, the same filters as <code>GET /jobs</code>).
       </p>
       <pre><code>Endpoint: https://mcp.12getajob.com/mcp
 Transport: Streamable HTTP
