@@ -29,8 +29,12 @@ for (const loc of LOCATIONS) {
 // Read before building the chips (not just later, at prefill time) --
 // a landing page with a location already active needs that to decide
 // whether to collapse the chip list below.
-const initialSource = window.__INITIAL_FILTERS__
-  || Object.fromEntries(new URLSearchParams(window.location.search));
+// A landing page's own filters (from its URL path) win over query params;
+// query params carry anything extra (keywords, company, ...) on top.
+const initialSource = {
+  ...Object.fromEntries(new URLSearchParams(window.location.search)),
+  ...(window.__INITIAL_FILTERS__ || {}),
+};
 const initial = { get: (k) => initialSource[k] || null };
 
 const chipsEl = document.getElementById('location-chips');
@@ -84,29 +88,54 @@ const prevBtn = document.getElementById('prev-page');
 const nextBtn = document.getElementById('next-page');
 const alertLink = document.getElementById('alert-link');
 
-// If location/remote or category is the *only* active filter, that's
-// exactly what a /jobs/{slug} landing page already represents -- so
-// navigate there instead of live-filtering in place, same URL a chip
-// click produces. Anything combined with a keyword/segment/exclude,
-// stays on the live /jobs search. Location+category together goes to
-// /jobs/{city}/{category} only when that combination has its own page
-// (assets/combos.js), otherwise it stays on the live search too.
-function landingPageSlug() {
-  if (q.value.trim() || segmentFilter.value || excludeInput.value.trim() || companyInput.value.trim()) return null;
+// Every filter state maps to a real page URL, so a visitor who filters
+// always ends up on a landing page rather than an anonymous dynamic one:
+// the most specific page for the location/category part
+// (/jobs/{city}/{category} when that combination has a page, see
+// assets/combos.js, else /jobs/{city}, /jobs/{category} or /jobs), with
+// everything else carried as query params. Those pages' canonical URLs
+// leave the query out, so search engines only ever see the clean pages.
+function targetUrl() {
   const loc = remoteOnly.checked
     ? 'remote'
-    : locationInput.value
-      ? (LOCATIONS.find((l) => l.name.toLowerCase() === locationInput.value) || {}).slug
-      : null;
+    : (LOCATIONS.find((l) => l.name.toLowerCase() === locationInput.value) || {}).slug
+      || (locationInput.value ? locationInput.value.replace(/\s+/g, '-') : null);
   const cat = categorySelect.value || null;
-  if (loc && cat) return COMBOS.some((c) => c.city === loc && c.category === cat) ? `${loc}/${cat}` : null;
-  return loc || cat || null;
+  const params = new URLSearchParams();
+  let path;
+  if (loc && cat && COMBOS.some((c) => c.city === loc && c.category === cat)) path = `/jobs/${loc}/${cat}`;
+  else if (loc) {
+    path = `/jobs/${loc}`;
+    if (cat) params.set('category', cat);
+  } else if (cat) path = `/jobs/${cat}`;
+  else path = '/jobs';
+  if (q.value.trim()) params.set('keywords', q.value.trim());
+  if (segmentFilter.value) params.set('segment', segmentFilter.value);
+  if (excludeInput.value.trim()) params.set('exclude_keywords', excludeInput.value.trim());
+  if (companyInput.value.trim()) params.set('company', companyInput.value.trim());
+  const query = params.toString();
+  return { path, url: path + (query ? '?' + query : '') };
 }
 
-function maybeNavigateToLandingPage() {
-  const slug = landingPageSlug();
-  if (slug) window.location.href = `/jobs/${slug}`;
-  return !!slug;
+function currentPath() {
+  return window.location.pathname.replace(/\.html$/, '').replace(/\/$/, '').toLowerCase() || '/';
+}
+
+// Navigates when the filters now belong to a different page; otherwise
+// just keeps the current URL's query params in sync (no reload, so typing
+// in the keyword box stays a live search).
+function goToFilterPage() {
+  const { path, url } = targetUrl();
+  if (path !== currentPath()) {
+    window.location.href = url;
+    return true;
+  }
+  history.replaceState(null, '', url);
+  return false;
+}
+
+function onFilterChange() {
+  if (!goToFilterPage()) searchFromStart();
 }
 
 function currentFilters() {
@@ -180,12 +209,12 @@ function searchFromStart() {
   debounceTimer = setTimeout(search, 250);
 }
 
-q.addEventListener('input', searchFromStart);
-categorySelect.addEventListener('change', () => { if (!maybeNavigateToLandingPage()) searchFromStart(); });
-segmentFilter.addEventListener('change', searchFromStart);
-locationInput.addEventListener('change', () => { if (!maybeNavigateToLandingPage()) searchFromStart(); });
-remoteOnly.addEventListener('change', () => { if (!maybeNavigateToLandingPage()) searchFromStart(); });
-excludeInput.addEventListener('input', searchFromStart);
+q.addEventListener('input', onFilterChange);
+categorySelect.addEventListener('change', onFilterChange);
+segmentFilter.addEventListener('change', onFilterChange);
+locationInput.addEventListener('change', onFilterChange);
+remoteOnly.addEventListener('change', onFilterChange);
+excludeInput.addEventListener('input', onFilterChange);
 const MAX_COMPANY_SUGGESTIONS = 15;
 function updateCompanySuggestions() {
   const value = companyInput.value.trim().toLowerCase();
@@ -203,7 +232,7 @@ function updateCompanySuggestions() {
   companyOptions.appendChild(fragment);
 }
 companyInput.addEventListener('input', updateCompanySuggestions);
-companyInput.addEventListener('input', searchFromStart);
+companyInput.addEventListener('input', onFilterChange);
 prevBtn.addEventListener('click', () => { offset = Math.max(0, offset - PAGE_SIZE); search(); });
 nextBtn.addEventListener('click', () => { offset += PAGE_SIZE; search(); });
 
@@ -216,8 +245,23 @@ if (initial.get('keywords')) q.value = initial.get('keywords');
 if (initial.get('category')) categorySelect.value = initial.get('category');
 if (initial.get('segment')) segmentFilter.value = initial.get('segment');
 if (initial.get('location_mode') === 'remote') remoteOnly.checked = true;
-else if (initial.get('location_mode')) locationInput.value = initial.get('location_mode');
+else if (initial.get('location_mode')) {
+  // A landing page for a city outside LOCATIONS (e.g. /jobs/eindhoven)
+  // gets its own option, or the select would silently show "Any location"
+  // and the next filter change would navigate away from this city.
+  const value = initial.get('location_mode').toLowerCase();
+  if (![...locationInput.options].some((o) => o.value === value)) {
+    const opt = document.createElement('option');
+    opt.value = value;
+    opt.textContent = value.replace(/\b\w/g, (c) => c.toUpperCase());
+    locationInput.appendChild(opt);
+  }
+  locationInput.value = value;
+}
 if (initial.get('exclude_keywords')) excludeInput.value = initial.get('exclude_keywords');
 if (initial.get('company')) companyInput.value = initial.get('company');
 
-search();
+// Plain /jobs reached with filters in the query string (an old link, a
+// bookmark): send it on to the landing page those filters belong to.
+if (currentPath() === '/jobs' && targetUrl().path !== '/jobs') window.location.replace(targetUrl().url);
+else search();
