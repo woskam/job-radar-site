@@ -462,12 +462,12 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://12getajob.com/jobs/london/consulting</loc>
+    <loc>https://12getajob.com/jobs/london/healthcare</loc>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://12getajob.com/jobs/london/healthcare</loc>
+    <loc>https://12getajob.com/jobs/london/consulting</loc>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
@@ -507,17 +507,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://12getajob.com/jobs/munich/climate</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://12getajob.com/jobs/paris/fintech</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://12getajob.com/jobs/paris/saas</loc>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
@@ -527,12 +517,17 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://12getajob.com/jobs/paris/devtools</loc>
+    <loc>https://12getajob.com/jobs/paris/saas</loc>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://12getajob.com/jobs/paris/consulting</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://12getajob.com/jobs/paris/devtools</loc>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>

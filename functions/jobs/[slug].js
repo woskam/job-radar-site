@@ -124,7 +124,7 @@ function pageFor(resolved, slug) {
   const key = slug.toLowerCase();
   let guide = "";
   if (resolved.kind === "location") {
-    const paragraphs = Object.hasOwn(CITY_CONTENT, key) ? CITY_CONTENT[key] : [];
+    const paragraphs = Object.hasOwn(CITY_CONTENT, key) ? CITY_CONTENT[key].text : [];
     const links = COMBOS.filter((c) => c.city === key)
       .map((c) => ({ href: `/jobs/${c.city}/${c.category}`, text: `${categoryLabel(c.category)} jobs in ${resolved.label}` }));
     if (paragraphs.length || links.length) {

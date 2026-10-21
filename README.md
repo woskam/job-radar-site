@@ -69,6 +69,11 @@ changing `assets/locations.js`:
 node scripts/generate-combos.mjs
 ```
 
+It ends with a short to-do list: combinations that have no hand-written text yet in
+`assets/combo-content.js` (kept out of the sitemap and noindexed until they do), and
+companies named in the city or combination text that no longer appear in the live
+listings, so the text needs a reread.
+
 ## Deploying
 
 ```bash
