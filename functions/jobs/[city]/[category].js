@@ -8,6 +8,7 @@
 // can lag behind live data: if a listed combination has since shrunk
 // below the bar, the page still renders for visitors but tells search
 // engines not to index it until the next regeneration drops it.
+import { COMBO_CONTENT } from "../../../assets/combo-content.js";
 import { COMBOS } from "../../../assets/combos.js";
 import {
   CSP_HEADER, HUB_URL, PAGE_SIZE, categoryLabel, cityName, escapeHtml, randomNonce, renderPage,
@@ -18,6 +19,16 @@ import {
 const MIN_LISTINGS = 20;
 const MIN_COMPANIES = 3;
 
+// Company names as stored carry scraper-config suffixes ("MediaMarkt NL",
+// "HSBC Netherlands" even on New York jobs) or raw keys ("politie"). For
+// the prose line only, show the plain name a person would use. Job cards
+// keep the stored name.
+const COMPANY_NAMES = { gemeente_amsterdam: "Gemeente Amsterdam", politie: "Politie" };
+const COMPANY_SUFFIX = /\s+(Netherlands|Nederland|NL|Benelux|Amsterdam|Germany|Deutschland)$/i;
+export function displayCompany(name) {
+  return COMPANY_NAMES[name] || name.replace(COMPANY_SUFFIX, "");
+}
+
 function joinNames(names) {
   if (names.length <= 1) return names.join("");
   return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
@@ -25,7 +36,11 @@ function joinNames(names) {
 
 function guideFor({ city, category, cityLabel, catLabel, jobs }) {
   const counts = new Map();
-  for (const job of jobs) if (job.company) counts.set(job.company, (counts.get(job.company) || 0) + 1);
+  for (const job of jobs) {
+    if (!job.company) continue;
+    const name = displayCompany(job.company);
+    counts.set(name, (counts.get(name) || 0) + 1);
+  }
   const top = [...counts].sort((a, b) => b[1] - a[1]).slice(0, 3).map(([name]) => name);
 
   const sameCity = COMBOS.filter((c) => c.city === city && c.category !== category)
@@ -33,9 +48,13 @@ function guideFor({ city, category, cityLabel, catLabel, jobs }) {
   const sameCategory = COMBOS.filter((c) => c.category === category && c.city !== city)
     .map((c) => `<a href="/jobs/${c.city}/${c.category}">${escapeHtml(cityName(c.city))}</a>`);
 
+  const key = `${city}/${category}`;
+  const paragraphs = Object.hasOwn(COMBO_CONTENT, key) ? COMBO_CONTENT[key] : [];
+
   return `
         <h2>${escapeHtml(catLabel)} in ${escapeHtml(cityLabel)}</h2>
-        <p>The employers with the most openings in this list right now are ${escapeHtml(joinNames(top))}. Want the bigger picture? Read more about <a href="/jobs/${city}">working in ${escapeHtml(cityLabel)}</a> or see all <a href="/jobs/${category}">${escapeHtml(catLabel)} jobs</a>.</p>${sameCity.length ? `
+        ${paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join("\n        ")}
+        <p>Right now, the employers with the most openings in this list are ${escapeHtml(joinNames(top))}. Want the bigger picture? Read more about <a href="/jobs/${city}">working in ${escapeHtml(cityLabel)}</a> or see all <a href="/jobs/${category}">${escapeHtml(catLabel)} jobs</a>.</p>${sameCity.length ? `
         <h3>Other industries in ${escapeHtml(cityLabel)}</h3>
         <p class="combo-links">${sameCity.join("\n          ")}</p>` : ""}${sameCategory.length ? `
         <h3>${escapeHtml(catLabel)} jobs in other cities</h3>
